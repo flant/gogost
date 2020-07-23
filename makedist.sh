@@ -37,7 +37,7 @@ mkdir -p src/golang.org/x/crypto
 
 cat > download.texi <<EOF
 You can obtain releases source code prepared tarballs on
-@url{http://gogost.cypherpunks.ru/}.
+@url{http://www.gogost.cypherpunks.ru/}.
 EOF
 
 texi=$(mktemp)
@@ -109,12 +109,12 @@ The main improvements for that release are:
 
 ------------------------ >8 ------------------------
 
-GoGOST'es home page is: http://gogost.cypherpunks.ru/
+GoGOST'es home page is: http://www.gogost.cypherpunks.ru/
 
 Source code and its signature for that version can be found here:
 
-    http://gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
-    http://gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
 
 Streebog-256 hash: $hashsb
 SHA256 hash: $hash
@@ -141,12 +141,12 @@ GoGOST это свободное программное обеспечение �
 
 ------------------------ >8 ------------------------
 
-Домашняя страница GoGOST: http://gogost.cypherpunks.ru/
+Домашняя страница GoGOST: http://www.gogost.cypherpunks.ru/
 
 Исходный код и его подпись для этой версии могут быть найдены здесь:
 
-    http://gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
-    http://gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
 
 Streebog-256 хэш: $hashsb
 SHA256 хэш: $hash

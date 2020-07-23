@@ -7,8 +7,8 @@ Preferable way is to download tarball with the signature from
 website and, for example, run tests with benchmarks:
 
 @example
-$ [fetch|wget] http://gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz
-$ [fetch|wget] http://gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz.sig
+$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz
+$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz.sig
 $ gpg --verify gogost-@value{VERSION}.tar.xz.sig gogost-@value{VERSION}.tar.xz
 $ xz --decompress --stdout gogost-@value{VERSION}.tar.xz | tar xf -
 $ cd gogost-@value{VERSION}
@@ -94,7 +94,7 @@ GoGOST is also @command{go get}-able. For example to use
 $ go get go.cypherpunks.ru/gogost/cmd/streebog256
 @end example
 
-@code{go.cypherpunks.ru} uses @url{http://ca.cypherpunks.ru/, ca.cypherpunks.ru}
+@code{go.cypherpunks.ru} uses @url{http://www.ca.cypherpunks.ru/, ca.cypherpunks.ru}
 certificate authority. If you have issues using either
 @code{sum.golang.org} or @code{proxy.golang.org}, then you can disable
 their usage with @env{GOPRIVATE=go.cypherpunks.ru/gogost} environment
