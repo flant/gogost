@@ -32,6 +32,31 @@ Known problems:
 * intermediate calculation values are not zeroed
 * 34.10 is not time constant and slow
 
+Example 34.10-2012-256 keypair generation, signing and verifying:
+
+    import (
+        "crypto/rand"
+        "io"
+        "go.cypherpunks.ru/gogost/v4/gost3410"
+        "go.cypherpunks.ru/gogost/v4/gost34112012256"
+    )
+    func main() {
+        data := []byte("data to be signed")
+        hasher := gost34112012256.New()
+        _, err := hasher.Write(data)
+        dgst := hasher.Sum(nil)
+        curve := gost3410.CurveIdtc26gost34102012256paramSetB()
+        prvRaw := make([]byte, int(gost3410.Mode2001))
+        _, err = io.ReadFull(rand.Reader, prvRaw)
+        prv, err := gost3410.NewPrivateKey(curve, gost3410.Mode2001, prvRaw)
+        pub, err := prv.PublicKey()
+        pubRaw := pub.Raw()
+        sign, err := prv.Sign(rand.Reader, dgst, nil)
+        pub, err = gost3410.NewPublicKey(curve, gost3410.Mode2001, pubRaw)
+        isValid, err := pub.VerifyDigest(dgst, sign)
+        if !isValid { panic("signature is invalid") }
+    }
+
 GoGOST is free software: see the file COPYING for copying conditions.
 
 GoGOST'es home page is: http://www.gogost.cypherpunks.ru/
