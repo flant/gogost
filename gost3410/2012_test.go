@@ -126,6 +126,7 @@ func TestStdVector2(t *testing.T) {
 		}),
 		nil,
 		nil,
+		nil,
 	)
 	if err != nil {
 		t.FailNow()
@@ -320,6 +321,7 @@ func TestGCL3Vectors(t *testing.T) {
 		bytes2big(b),
 		bytes2big(x),
 		bytes2big(y),
+		nil,
 		nil,
 		nil,
 	)

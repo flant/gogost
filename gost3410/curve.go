@@ -25,6 +25,7 @@ var (
 	bigInt1 *big.Int = big.NewInt(1)
 	bigInt2 *big.Int = big.NewInt(2)
 	bigInt3 *big.Int = big.NewInt(3)
+	bigInt4 *big.Int = big.NewInt(4)
 )
 
 type Curve struct {
@@ -32,6 +33,8 @@ type Curve struct {
 
 	P *big.Int // Characteristic of the underlying prime field
 	Q *big.Int // Elliptic curve subgroup order
+
+	Co *big.Int // Cofactor
 
 	// Equation coefficients of the elliptic curve in canonical form
 	A *big.Int
@@ -55,7 +58,7 @@ type Curve struct {
 	edT *big.Int
 }
 
-func NewCurve(p, q, a, b, x, y, e, d *big.Int) (*Curve, error) {
+func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 	c := Curve{
 		Name: "unknown",
 		P:    p,
@@ -84,6 +87,11 @@ func NewCurve(p, q, a, b, x, y, e, d *big.Int) (*Curve, error) {
 	if e != nil && d != nil {
 		c.E = e
 		c.D = d
+	}
+	if co == nil {
+		c.Co = bigInt1
+	} else {
+		c.Co = co
 	}
 	return &c, nil
 }
