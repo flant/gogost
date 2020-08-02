@@ -1,4 +1,5 @@
-rm -f gogost.html/*.html
+html=gogost.html
+rm -f $html/*.html
 ${MAKEINFO:-makeinfo} --html \
     --set-customization-variable EXTRA_HEAD='<link rev="made" href="mailto:webmaster@cypherpunks.ru">' \
     --set-customization-variable CSS_LINES="`cat style.css`" \
@@ -8,4 +9,6 @@ ${MAKEINFO:-makeinfo} --html \
     --set-customization-variable TOP_NODE_UP_URL=index.html \
     --set-customization-variable CLOSE_QUOTE_SYMBOL=\" \
     --set-customization-variable OPEN_QUOTE_SYMBOL=\" \
-    -o gogost.html www.texi
+    -o $html www.texi
+find $html -type d -exec chmod 755 {} \;
+find $html -type f -exec chmod 644 {} \;
