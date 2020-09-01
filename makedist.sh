@@ -29,6 +29,9 @@ mv \
 rm module-name.do clean.do
 echo $mod_name > module-name
 find . -name "*.do" -exec perl -i -npe "s/^go/GOPATH=\`pwd\` go/" {} \;
+perl -i -npe "s/UNKNOWN/v$release/" src/$mod_name/gogost.go
+mkdir contrib
+cp ~/work/redo/minimal/do contrib/do
 
 mkdir -p src/golang.org/x/crypto
 ( cd $GOPATH/pkg/mod/$crypto_mod_path ; \
@@ -74,6 +77,7 @@ rm -f *.texi www.do style.css makedist.sh TODO .gitignore
 
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
+chmod 755 contrib/do
 
 cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"

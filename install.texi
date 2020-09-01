@@ -1,7 +1,7 @@
 @node Download
 @unnumbered Download
 
-@set VERSION 4.3.0
+@set VERSION 4.3.1
 
 Preferable way is to download tarball with the signature from
 website and, for example, run tests with benchmarks:
@@ -12,20 +12,14 @@ $ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz.si
 $ gpg --verify gogost-@value{VERSION}.tar.xz.sig gogost-@value{VERSION}.tar.xz
 $ xz --decompress --stdout gogost-@value{VERSION}.tar.xz | tar xf -
 $ cd gogost-@value{VERSION}
-$ redo bench
-$ redo all
+$ redo bench all
 $ echo hello world | ./streebog256
 f72018189a5cfb803dbe1f2149cf554c40093d8e7f81c21e08ac5bcd09d9934d
 @end example
 
 It uses @url{http://cr.yp.to/redo.html, redo} build system for that
 examples. You can use either dozen of various implementations, or at
-least minimalistic POSIX shell @code{apenwarr/do}:
-
-@example
-$ [fetch|wget] https://github.com/apenwarr/redo/raw/master/minimal/do
-$ mv do redo ; chmod +x redo
-@end example
+least minimalistic POSIX shell @command{contrib/do} included in tarball.
 
 @include download.texi
 
