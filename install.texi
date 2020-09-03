@@ -19,7 +19,9 @@ f72018189a5cfb803dbe1f2149cf554c40093d8e7f81c21e08ac5bcd09d9934d
 
 It uses @url{http://cr.yp.to/redo.html, redo} build system for that
 examples. You can use either dozen of various implementations, or at
-least minimalistic POSIX shell @command{contrib/do} included in tarball.
+least minimalistic POSIX shell @command{contrib/do} (just replace
+@command{redo} with @command{contrib/do} in the example above) included
+in tarball.
 
 @include download.texi
 
