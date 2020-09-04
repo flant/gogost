@@ -40,7 +40,7 @@ import (
     "encoding/hex"
     "fmt"
 
-    "go.cypherpunks.ru/gogost/v4/gost34112012256"
+    "go.cypherpunks.ru/gogost/v5/gost34112012256"
 )
 
 func main() @{
@@ -99,8 +99,8 @@ variable.
 Also you can use @code{replace} feature inside your @file{go.mod}, like:
 
 @example
-require go.cypherpunks.ru/gogost/v4 v@value{VERSION}
-replace go.cypherpunks.ru/gogost/v4 => /home/stargrave/gogost-@value{VERSION}/src/go.cypherpunks.ru/gogost/v4
+require go.cypherpunks.ru/gogost/v5 v@value{VERSION}
+replace go.cypherpunks.ru/gogost/v5 => /home/stargrave/gogost-@value{VERSION}/src/go.cypherpunks.ru/gogost/v5
 @end example
 
 You can obtain development source code with

@@ -37,8 +37,8 @@ Example 34.10-2012-256 keypair generation, signing and verifying:
     import (
         "crypto/rand"
         "io"
-        "go.cypherpunks.ru/gogost/v4/gost3410"
-        "go.cypherpunks.ru/gogost/v4/gost34112012256"
+        "go.cypherpunks.ru/gogost/v5/gost3410"
+        "go.cypherpunks.ru/gogost/v5/gost34112012256"
     )
     func main() {
         data := []byte("data to be signed")
