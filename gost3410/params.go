@@ -15,12 +15,7 @@
 
 package gost3410
 
-type Mode int
-
 var (
-	Mode2001 Mode = Mode(32)
-	Mode2012 Mode = Mode(64)
-
 	CurveGostR34102001ParamSetcc func() *Curve = func() *Curve {
 		curve, err := NewCurve(
 			bytes2big([]byte{

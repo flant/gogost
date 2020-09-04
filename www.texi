@@ -74,13 +74,13 @@ func main() {
     _, err := hasher.Write(data)
     dgst := hasher.Sum(nil)
     curve := gost3410.CurveIdtc26gost34102012256paramSetB()
-    prvRaw := make([]byte, int(gost3410.Mode2001))
+    prvRaw := make([]byte, 32)
     _, err = io.ReadFull(rand.Reader, prvRaw)
-    prv, err := gost3410.NewPrivateKey(curve, gost3410.Mode2001, prvRaw)
+    prv, err := gost3410.NewPrivateKey(curve, prvRaw)
     pub, err := prv.PublicKey()
     pubRaw := pub.Raw()
     sign, err := prv.Sign(rand.Reader, dgst, nil)
-    pub, err = gost3410.NewPublicKey(curve, gost3410.Mode2001, pubRaw)
+    pub, err = gost3410.NewPublicKey(curve, pubRaw)
     isValid, err := pub.VerifyDigest(dgst, sign)
     if !isValid { panic("signature is invalid") }
 }

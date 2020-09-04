@@ -96,6 +96,10 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 	return &c, nil
 }
 
+func (c *Curve) PointSize() int {
+	return PointSize(c.P)
+}
+
 func (c *Curve) pos(v *big.Int) {
 	if v.Cmp(zero) < 0 {
 		v.Add(v, c.P)

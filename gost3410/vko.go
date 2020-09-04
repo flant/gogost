@@ -31,6 +31,6 @@ func (prv *PrivateKey) KEK(pub *PublicKey, ukm *big.Int) ([]byte, error) {
 			return nil, err
 		}
 	}
-	pk := PublicKey{prv.C, prv.Mode, keyX, keyY}
+	pk := PublicKey{prv.C, keyX, keyY}
 	return pk.Raw(), nil
 }
