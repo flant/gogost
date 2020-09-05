@@ -5,11 +5,12 @@ tmp=$(mktemp -d)
 release=$1
 [ -n "$release" ]
 
-redo-ifchange module-name streebog256
-mod_name=`cat module-name`
+redo-ifchange streebog256
 git clone . $tmp/gogost-$release
 cd $tmp/gogost-$release
 git checkout v$release
+redo module-name VERSION
+mod_name=`cat module-name`
 
 crypto_mod_path=$(sed -n 's#^require \(golang.org/x/crypto\) \(.*\)$#\1@\2#p' go.mod)
 mkdir -p src/$mod_name
@@ -26,10 +27,8 @@ mv \
     prfplus \
     cmd internal gogost.go go.mod go.sum src/$mod_name
 
-rm module-name.do clean.do
 echo $mod_name > module-name
 find . -name "*.do" -exec perl -i -npe "s/^go/GOPATH=\`pwd\` go/" {} \;
-perl -i -npe "s/UNKNOWN/v$release/" src/$mod_name/gogost.go
 mkdir contrib
 cp ~/work/redo/minimal/do contrib/do
 
@@ -43,6 +42,13 @@ You can obtain releases source code prepared tarballs on
 @url{http://www.gogost.cypherpunks.ru/}.
 EOF
 
+mkinfo() {
+    ${MAKEINFO:-makeinfo} --plaintext \
+        --set-customization-variable CLOSE_QUOTE_SYMBOL=\" \
+        --set-customization-variable OPEN_QUOTE_SYMBOL=\" \
+        -D "VERSION `cat VERSION`" $@
+}
+
 texi=$(mktemp)
 cat > $texi <<EOF
 \input texinfo
@@ -51,8 +57,7 @@ cat > $texi <<EOF
 @include install.texi
 @bye
 EOF
-makeinfo --plaintext -o INSTALL $texi
-rm $texi
+mkinfo --output INSTALL $texi
 
 cat > $texi <<EOF
 \input texinfo
@@ -61,7 +66,7 @@ cat > $texi <<EOF
 @include news.texi
 @bye
 EOF
-makeinfo --plaintext -o NEWS $texi
+mkinfo --output NEWS $texi
 
 cat > $texi <<EOF
 \input texinfo
@@ -70,10 +75,21 @@ cat > $texi <<EOF
 @include faq.texi
 @bye
 EOF
-makeinfo --plaintext -o FAQ $texi
+mkinfo --output FAQ $texi
 
 find . -name .git -type d | xargs rm -fr
-rm -f *.texi www.do style.css makedist.sh TODO .gitignore
+rm -fr .redo
+rm -f \
+    $texi \
+    *.texi \
+    .gitignore \
+    clean.do \
+    makedist.sh \
+    module-name.do \
+    style.css \
+    TODO \
+    VERSION.do \
+    www.do
 
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
@@ -163,3 +179,4 @@ https://lists.cypherpunks.ru/mailman/listinfo/gost
 EOF
 
 mv $tmp/$tarball $tmp/"$tarball".sig $cur/gogost.html/
+rm -fr $tmp
