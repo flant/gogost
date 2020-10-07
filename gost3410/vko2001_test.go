@@ -18,6 +18,7 @@ package gost3410
 import (
 	"bytes"
 	"encoding/hex"
+	"math/big"
 	"testing"
 	"testing/quick"
 )
@@ -39,6 +40,26 @@ func TestVKO2001(t *testing.T) {
 		t.FailNow()
 	}
 	if bytes.Compare(kek1, kek) != 0 {
+		t.FailNow()
+	}
+}
+
+func TestVKOUKMAltering(t *testing.T) {
+	c := CurveIdtc26gost34102012256paramSetA()
+	ukm := big.NewInt(1)
+	prv, err := NewPrivateKey(c, bytes.Repeat([]byte{0x12}, 32))
+	if err != nil {
+		panic(err)
+	}
+	pub, err := prv.PublicKey()
+	if err != nil {
+		panic(err)
+	}
+	_, err = prv.KEK(pub, ukm)
+	if err != nil {
+		panic(err)
+	}
+	if ukm.Cmp(big.NewInt(1)) != 0 {
 		t.FailNow()
 	}
 }

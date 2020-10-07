@@ -3,6 +3,11 @@
 
 @table @strong
 
+@anchor{Release 5.1.0}
+@item 5.1.0
+    @code{gost3410/KEK*} functions do not alter @code{ukm} argument.
+    It is safe to reuse now.
+
 @anchor{Release 5.0.0}
 @item 5.0.0
     Backward incompatible remove of excess misleading @code{gost3410.Mode}
