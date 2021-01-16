@@ -3,6 +3,11 @@
 
 @table @strong
 
+@anchor{Release 5.1.1}
+@item 5.1.1
+    Tarball uses vendoring, instead of @env{GOPATH} overriding.
+    As minimal Go version is 1.12 for a long time, it supports modules.
+
 @anchor{Release 5.1.0}
 @item 5.1.0
     @code{gost3410/KEK*} functions do not alter @code{ukm} argument.

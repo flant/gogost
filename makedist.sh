@@ -9,33 +9,10 @@ redo-ifchange streebog256
 git clone . $tmp/gogost-$release
 cd $tmp/gogost-$release
 git checkout v$release
-redo module-name VERSION
-mod_name=`cat module-name`
-
-crypto_mod_path=$(sed -n 's#^require \(golang.org/x/crypto\) \(.*\)$#\1@\2#p' go.mod)
-mkdir -p src/$mod_name
-mv \
-    gost28147 \
-    gost3410 \
-    gost34112012256 \
-    gost34112012512 \
-    gost341194 \
-    gost3412128 \
-    gost341264 \
-    gost3413 \
-    mgm \
-    prfplus \
-    cmd internal gogost.go go.mod go.sum src/$mod_name
-
-echo $mod_name > module-name
-find . -name "*.do" -exec perl -i -npe "s/^go/GOPATH=\`pwd\` go/" {} \;
+redo VERSION
+go mod vendor
 mkdir contrib
 cp ~/work/redo/minimal/do contrib/do
-
-mkdir -p src/golang.org/x/crypto
-( cd $GOPATH/pkg/mod/$crypto_mod_path ; \
-    tar cf - AUTHORS CONTRIBUTORS LICENSE PATENTS README.md pbkdf2 hkdf ) |
-    tar xfC - src/golang.org/x/crypto
 
 cat > download.texi <<EOF
 You can obtain releases source code prepared tarballs on
@@ -77,23 +54,25 @@ cat > $texi <<EOF
 EOF
 mkinfo --output FAQ $texi
 
-find . -name .git -type d | xargs rm -fr
-rm -fr .redo
+rm -rf .git
+redo-cleanup full
 rm -f \
     $texi \
     *.texi \
     .gitignore \
     clean.do \
     makedist.sh \
-    module-name.do \
     style.css \
     TODO \
     VERSION.do \
     www.do
 
+perl -i -npe "s/build/build -mod=vendor/" default.do
+perl -i -npe "s/test/test -mod=vendor/" bench.do
+
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
-chmod 755 contrib/do
+chmod +x contrib/do
 
 cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"

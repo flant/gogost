@@ -10,7 +10,7 @@ $ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz.si
 $ gpg --verify gogost-@value{VERSION}.tar.xz.sig gogost-@value{VERSION}.tar.xz
 $ xz --decompress --stdout gogost-@value{VERSION}.tar.xz | tar xf -
 $ cd gogost-@value{VERSION}
-$ redo bench all
+$ redo all
 $ echo hello world | ./streebog256
 f72018189a5cfb803dbe1f2149cf554c40093d8e7f81c21e08ac5bcd09d9934d
 @end example
@@ -27,10 +27,9 @@ And then you can include its source code in your project for example
 like this:
 
 @example
-$ mkdir -p myproj/src
-$ cp -r gogost-@value{VERSION}/src/go.cypherpunks.ru myproj/src
-$ export GOPATH=$PWD/myproj
-$ cd myproj/src
+$ mkdir -p myproj/vendor/go.cypherpunks.ru/gogost
+$ mv gogost-@value{VERSION} myproj/vendor/go.cypherpunks.ru/gogost/v5
+$ cd myproj
 $ cat > main.go <<EOF
 package main
 
@@ -88,18 +87,19 @@ GoGOST is also @command{go get}-able. For example to use
 $ go get go.cypherpunks.ru/gogost/cmd/streebog256
 @end example
 
-@code{go.cypherpunks.ru} uses @url{http://www.ca.cypherpunks.ru/, ca.cypherpunks.ru}
-certificate authority. If you have issues using either
-@code{sum.golang.org} or @code{proxy.golang.org}, then you can disable
-their usage with @env{GOPRIVATE=go.cypherpunks.ru/gogost} environment
-variable.
+If you have problems with @code{*.golang.org}'s inability to verify
+authenticity of @code{go.cypherpunks.ru} TLS connection, then you can
+disable their usage by setting @env{GOPRIVATE=go.cypherpunks.ru}. You
+can override CA certificate file path with @env{SSL_CERT_FILE} and
+@env{GIT_SSL_CAINFO} environment variables.
 
 Also you can use @code{replace} feature inside your @file{go.mod}, like:
 
 @example
 require go.cypherpunks.ru/gogost/v5 v@value{VERSION}
-replace go.cypherpunks.ru/gogost/v5 => /home/stargrave/gogost-@value{VERSION}/src/go.cypherpunks.ru/gogost/v5
+replace go.cypherpunks.ru/gogost/v5 => /path/to/gogost-@value{VERSION}
 @end example
 
 You can obtain development source code with
-@command{git clone git://git.cypherpunks.ru/gogost.git}.
+@command{git clone git://git.cypherpunks.ru/gogost.git}
+(also you can use @url{https://git.cypherpunks.ru/gogost.git}).
