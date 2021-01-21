@@ -40,10 +40,10 @@ func init() {
 }
 
 type MGM struct {
-	maxSize   uint64
+	MaxSize   uint64
+	BlockSize int
+	TagSize   int
 	cipher    cipher.Block
-	blockSize int
-	tagSize   int
 	icn       []byte
 	bufP      []byte
 	bufC      []byte
@@ -67,10 +67,10 @@ func NewMGM(cipher cipher.Block, tagSize int) (cipher.AEAD, error) {
 		return nil, errors.New("gogost/mgm: invalid tag size")
 	}
 	mgm := MGM{
-		maxSize:   uint64(1<<uint(blockSize*8/2) - 1),
+		MaxSize:   uint64(1<<uint(blockSize*8/2) - 1),
+		BlockSize: blockSize,
+		TagSize:   tagSize,
 		cipher:    cipher,
-		blockSize: blockSize,
-		tagSize:   tagSize,
 		icn:       make([]byte, blockSize),
 		bufP:      make([]byte, blockSize),
 		bufC:      make([]byte, blockSize),
@@ -92,11 +92,11 @@ func NewMGM(cipher cipher.Block, tagSize int) (cipher.AEAD, error) {
 }
 
 func (mgm *MGM) NonceSize() int {
-	return mgm.blockSize
+	return mgm.BlockSize
 }
 
 func (mgm *MGM) Overhead() int {
-	return mgm.tagSize
+	return mgm.TagSize
 }
 
 func incr(data []byte) {
@@ -115,7 +115,7 @@ func xor(dst, src1, src2 []byte) {
 }
 
 func (mgm *MGM) validateNonce(nonce []byte) {
-	if len(nonce) != mgm.blockSize {
+	if len(nonce) != mgm.BlockSize {
 		panic("nonce length must be equal to cipher's blocksize")
 	}
 	if nonce[0]&0x80 > 0 {
@@ -127,86 +127,86 @@ func (mgm *MGM) validateSizes(text, additionalData []byte) {
 	if len(text) == 0 && len(additionalData) == 0 {
 		panic("at least either *text or additionalData must be provided")
 	}
-	if uint64(len(additionalData)) > mgm.maxSize {
+	if uint64(len(additionalData)) > mgm.MaxSize {
 		panic("additionalData is too big")
 	}
-	if uint64(len(text)+len(additionalData)) > mgm.maxSize {
+	if uint64(len(text)+len(additionalData)) > mgm.MaxSize {
 		panic("*text with additionalData are too big")
 	}
 }
 
 func (mgm *MGM) auth(out, text, ad []byte) {
-	for i := 0; i < mgm.blockSize; i++ {
+	for i := 0; i < mgm.BlockSize; i++ {
 		mgm.sum[i] = 0
 	}
 	adLen := len(ad) * 8
 	textLen := len(text) * 8
 	mgm.icn[0] |= 0x80
 	mgm.cipher.Encrypt(mgm.bufP, mgm.icn) // Z_1 = E_K(1 || ICN)
-	for len(ad) >= mgm.blockSize {
+	for len(ad) >= mgm.BlockSize {
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP) // H_i = E_K(Z_i)
 		xor(                                   // sum (xor)= H_i (x) A_i
 			mgm.sum,
 			mgm.sum,
-			mgm.mul(mgm.bufC, ad[:mgm.blockSize]),
+			mgm.mul(mgm.bufC, ad[:mgm.BlockSize]),
 		)
-		incr(mgm.bufP[:mgm.blockSize/2]) // Z_{i+1} = incr_l(Z_i)
-		ad = ad[mgm.blockSize:]
+		incr(mgm.bufP[:mgm.BlockSize/2]) // Z_{i+1} = incr_l(Z_i)
+		ad = ad[mgm.BlockSize:]
 	}
 	if len(ad) > 0 {
 		copy(mgm.padded, ad)
-		for i := len(ad); i < mgm.blockSize; i++ {
+		for i := len(ad); i < mgm.BlockSize; i++ {
 			mgm.padded[i] = 0
 		}
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP)
 		xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufC, mgm.padded))
-		incr(mgm.bufP[:mgm.blockSize/2])
+		incr(mgm.bufP[:mgm.BlockSize/2])
 	}
 
-	for len(text) >= mgm.blockSize {
+	for len(text) >= mgm.BlockSize {
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP) // H_{h+j} = E_K(Z_{h+j})
 		xor(                                   // sum (xor)= H_{h+j} (x) C_j
 			mgm.sum,
 			mgm.sum,
-			mgm.mul(mgm.bufC, text[:mgm.blockSize]),
+			mgm.mul(mgm.bufC, text[:mgm.BlockSize]),
 		)
-		incr(mgm.bufP[:mgm.blockSize/2]) // Z_{h+j+1} = incr_l(Z_{h+j})
-		text = text[mgm.blockSize:]
+		incr(mgm.bufP[:mgm.BlockSize/2]) // Z_{h+j+1} = incr_l(Z_{h+j})
+		text = text[mgm.BlockSize:]
 	}
 	if len(text) > 0 {
 		copy(mgm.padded, text)
-		for i := len(text); i < mgm.blockSize; i++ {
+		for i := len(text); i < mgm.BlockSize; i++ {
 			mgm.padded[i] = 0
 		}
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP)
 		xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufC, mgm.padded))
-		incr(mgm.bufP[:mgm.blockSize/2])
+		incr(mgm.bufP[:mgm.BlockSize/2])
 	}
 
 	mgm.cipher.Encrypt(mgm.bufP, mgm.bufP) // H_{h+q+1} = E_K(Z_{h+q+1})
 	// len(A) || len(C)
-	if mgm.blockSize == 8 {
+	if mgm.BlockSize == 8 {
 		binary.BigEndian.PutUint32(mgm.bufC, uint32(adLen))
-		binary.BigEndian.PutUint32(mgm.bufC[mgm.blockSize/2:], uint32(textLen))
+		binary.BigEndian.PutUint32(mgm.bufC[mgm.BlockSize/2:], uint32(textLen))
 	} else {
 		binary.BigEndian.PutUint64(mgm.bufC, uint64(adLen))
-		binary.BigEndian.PutUint64(mgm.bufC[mgm.blockSize/2:], uint64(textLen))
+		binary.BigEndian.PutUint64(mgm.bufC[mgm.BlockSize/2:], uint64(textLen))
 	}
 	// sum (xor)= H_{h+q+1} (x) (len(A) || len(C))
 	xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufP, mgm.bufC))
 	mgm.cipher.Encrypt(mgm.bufP, mgm.sum) // E_K(sum)
-	copy(out, mgm.bufP[:mgm.tagSize])     // MSB_S(E_K(sum))
+	copy(out, mgm.bufP[:mgm.TagSize])     // MSB_S(E_K(sum))
 }
 
 func (mgm *MGM) crypt(out, in []byte) {
 	mgm.icn[0] &= 0x7F
 	mgm.cipher.Encrypt(mgm.bufP, mgm.icn) // Y_1 = E_K(0 || ICN)
-	for len(in) >= mgm.blockSize {
+	for len(in) >= mgm.BlockSize {
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP) // E_K(Y_i)
 		xor(out, mgm.bufC, in)                 // C_i = P_i (xor) E_K(Y_i)
-		incr(mgm.bufP[mgm.blockSize/2:])       // Y_i = incr_r(Y_{i-1})
-		out = out[mgm.blockSize:]
-		in = in[mgm.blockSize:]
+		incr(mgm.bufP[mgm.BlockSize/2:])       // Y_i = incr_r(Y_{i-1})
+		out = out[mgm.BlockSize:]
+		in = in[mgm.BlockSize:]
 	}
 	if len(in) > 0 {
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP)
@@ -217,14 +217,14 @@ func (mgm *MGM) crypt(out, in []byte) {
 func (mgm *MGM) Seal(dst, nonce, plaintext, additionalData []byte) []byte {
 	mgm.validateNonce(nonce)
 	mgm.validateSizes(plaintext, additionalData)
-	if uint64(len(plaintext)) > mgm.maxSize {
+	if uint64(len(plaintext)) > mgm.MaxSize {
 		panic("plaintext is too big")
 	}
-	ret, out := sliceForAppend(dst, len(plaintext)+mgm.tagSize)
+	ret, out := sliceForAppend(dst, len(plaintext)+mgm.TagSize)
 	copy(mgm.icn, nonce)
 	mgm.crypt(out, plaintext)
 	mgm.auth(
-		out[len(plaintext):len(plaintext)+mgm.tagSize],
+		out[len(plaintext):len(plaintext)+mgm.TagSize],
 		out[:len(plaintext)],
 		additionalData,
 	)
@@ -235,13 +235,14 @@ func (mgm *MGM) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, err
 	mgm.validateNonce(nonce)
 	mgm.validateSizes(ciphertext, additionalData)
 	if uint64(len(ciphertext)-mgm.tagSize) > mgm.maxSize {
+	if uint64(len(ciphertext)-mgm.TagSize) > mgm.MaxSize {
 		panic("ciphertext is too big")
 	}
-	ret, out := sliceForAppend(dst, len(ciphertext)-mgm.tagSize)
-	ct := ciphertext[:len(ciphertext)-mgm.tagSize]
+	ret, out := sliceForAppend(dst, len(ciphertext)-mgm.TagSize)
+	ct := ciphertext[:len(ciphertext)-mgm.TagSize]
 	copy(mgm.icn, nonce)
 	mgm.auth(mgm.sum, ct, additionalData)
-	if !hmac.Equal(mgm.sum[:mgm.tagSize], ciphertext[len(ciphertext)-mgm.tagSize:]) {
+	if !hmac.Equal(mgm.sum[:mgm.TagSize], ciphertext[len(ciphertext)-mgm.TagSize:]) {
 		return nil, errors.New("gogost/mgm: invalid authentication tag")
 	}
 	mgm.crypt(out, ct)
