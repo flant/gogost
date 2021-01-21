@@ -198,6 +198,8 @@ var (
 		},
 	}
 	a [64]uint64 // It is filled in init()
+
+	cache [8][256]uint64
 )
 
 func init() {
@@ -270,15 +272,32 @@ func init() {
 	for i := 0; i < 64; i++ {
 		a[i] = binary.BigEndian.Uint64(as[i])
 	}
+	for byteN := 0; byteN < 8; byteN++ {
+		for byteValN := 0; byteValN < 256; byteValN++ {
+			val := byte(byteValN)
+			res64 := uint64(0)
+			for bitN := 0; bitN < 8; bitN++ {
+				if val&0x80 > 0 {
+					res64 ^= a[(7-byteN)*8+bitN]
+				}
+				val <<= 1
+			}
+			cache[byteN][byteValN] = res64
+		}
+	}
 }
 
 type Hash struct {
-	size int
-	buf  []byte
-	n    uint64
-	hsh  *[BlockSize]byte
-	chk  *[BlockSize]byte
-	tmp  *[BlockSize]byte
+	size   int
+	buf    []byte
+	n      uint64
+	hsh    []byte
+	chk    []byte
+	tmp    []byte
+	psBuf  []byte
+	eBuf   []byte
+	gBuf   []byte
+	addBuf []byte
 }
 
 // Create new hash object with specified size digest size.
@@ -287,10 +306,14 @@ func New(size int) *Hash {
 		panic("size must be either 32 or 64")
 	}
 	h := Hash{
-		size: size,
-		hsh:  new([BlockSize]byte),
-		chk:  new([BlockSize]byte),
-		tmp:  new([BlockSize]byte),
+		size:   size,
+		hsh:    make([]byte, BlockSize),
+		chk:    make([]byte, BlockSize),
+		tmp:    make([]byte, BlockSize),
+		psBuf:  make([]byte, BlockSize),
+		eBuf:   make([]byte, BlockSize),
+		gBuf:   make([]byte, BlockSize),
+		addBuf: make([]byte, BlockSize),
 	}
 	h.Reset()
 	return &h
@@ -320,9 +343,9 @@ func (h *Hash) Size() int {
 func (h *Hash) Write(data []byte) (int, error) {
 	h.buf = append(h.buf, data...)
 	for len(h.buf) >= BlockSize {
-		copy(h.tmp[:], h.buf[:BlockSize])
-		h.hsh = g(h.n, h.hsh, h.tmp)
-		h.chk = add512bit(h.chk, h.tmp)
+		copy(h.tmp, h.buf[:BlockSize])
+		h.hsh = h.g(h.n, h.hsh, h.tmp)
+		h.chk = h.add512bit(h.chk, h.tmp)
 		h.n += BlockSize * 8
 		h.buf = h.buf[BlockSize:]
 	}
@@ -330,82 +353,81 @@ func (h *Hash) Write(data []byte) (int, error) {
 }
 
 func (h *Hash) Sum(in []byte) []byte {
-	buf := new([BlockSize]byte)
-	copy(h.tmp[:], buf[:])
-	copy(buf[:], h.buf[:])
+	buf := make([]byte, BlockSize)
+	copy(h.tmp, buf)
+	copy(buf, h.buf)
 	buf[len(h.buf)] = 1
-	hsh := g(h.n, h.hsh, buf)
-	binary.LittleEndian.PutUint64(h.tmp[:], h.n+uint64(len(h.buf))*8)
-	hsh = g(0, hsh, h.tmp)
-	hsh = g(0, hsh, add512bit(h.chk, buf))
+	hsh := h.g(h.n, h.hsh, buf)
+	binary.LittleEndian.PutUint64(h.tmp, h.n+uint64(len(h.buf))*8)
+	hsh = h.g(0, hsh, h.tmp)
+	hsh = h.g(0, hsh, h.add512bit(h.chk, buf))
 	if h.size == 32 {
 		return append(in, hsh[BlockSize/2:]...)
 	}
-	return append(in, hsh[:]...)
+	return append(in, hsh...)
 }
 
-func add512bit(chk, data *[BlockSize]byte) *[BlockSize]byte {
+func (h *Hash) add512bit(chk, data []byte) []byte {
 	var ss uint16
-	r := new([BlockSize]byte)
 	for i := 0; i < BlockSize; i++ {
 		ss = uint16(chk[i]) + uint16(data[i]) + (ss >> 8)
-		r[i] = byte(0xFF & ss)
+		h.addBuf[i] = byte(0xFF & ss)
 	}
-	return r
+	return h.addBuf
 }
 
-func g(n uint64, hsh, data *[BlockSize]byte) *[BlockSize]byte {
-	ns := make([]byte, 8)
-	binary.LittleEndian.PutUint64(ns, n)
-	r := new([BlockSize]byte)
-	for i := 0; i < 8; i++ {
-		r[i] = hsh[i] ^ ns[i]
-	}
-	copy(r[8:], hsh[8:])
-	return blockXor(blockXor(e(l(ps(r)), data), hsh), data)
+func (h *Hash) g(n uint64, hsh, data []byte) []byte {
+	r := make([]byte, BlockSize)
+	copy(r, hsh)
+	r[0] ^= byte((n >> 0) & 0xFF)
+	r[1] ^= byte((n >> 8) & 0xFF)
+	r[2] ^= byte((n >> 16) & 0xFF)
+	r[3] ^= byte((n >> 24) & 0xFF)
+	r[4] ^= byte((n >> 32) & 0xFF)
+	r[5] ^= byte((n >> 40) & 0xFF)
+	r[6] ^= byte((n >> 48) & 0xFF)
+	r[7] ^= byte((n >> 56) & 0xFF)
+	return blockXor(h.gBuf, blockXor(h.gBuf, h.e(l(r, h.ps(r)), data), hsh), data)
 }
 
-func e(k, msg *[BlockSize]byte) *[BlockSize]byte {
+func (h *Hash) e(k, msg []byte) []byte {
+	msgBuf := make([]byte, BlockSize)
+	kBuf := make([]byte, BlockSize)
 	for i := 0; i < 12; i++ {
-		msg = l(ps(blockXor(k, msg)))
-		k = l(ps(blockXor(k, &c[i])))
+		msg = l(msgBuf, h.ps(blockXor(h.eBuf, k, msg)))
+		k = l(kBuf, h.ps(blockXor(h.eBuf, k, c[i][:])))
 	}
-	return blockXor(k, msg)
+	return blockXor(h.eBuf, k, msg)
 }
 
-func blockXor(x, y *[BlockSize]byte) *[BlockSize]byte {
-	r := new([BlockSize]byte)
+func blockXor(dst, x, y []byte) []byte {
 	for i := 0; i < BlockSize; i++ {
-		r[i] = x[i] ^ y[i]
+		dst[i] = x[i] ^ y[i]
 	}
-	return r
+	return dst
 }
 
-func ps(data *[BlockSize]byte) *[BlockSize]byte {
-	r := new([BlockSize]byte)
+func (h *Hash) ps(data []byte) []byte {
 	for i := 0; i < BlockSize; i++ {
-		r[tau[i]] = pi[int(data[i])]
+		h.psBuf[tau[i]] = pi[int(data[i])]
 	}
-	return r
+	return h.psBuf
 }
 
-func l(data *[BlockSize]byte) *[BlockSize]byte {
-	var val uint64
-	var res64 uint64
-	var j int
-	r := new([BlockSize]byte)
+func l(out, data []byte) []byte {
 	for i := 0; i < 8; i++ {
-		val = binary.LittleEndian.Uint64(data[i*8 : i*8+8])
-		res64 = 0
-		for j = 0; j < BlockSize; j++ {
-			if val&0x8000000000000000 > 0 {
-				res64 ^= a[j]
-			}
-			val <<= 1
-		}
-		binary.LittleEndian.PutUint64(r[i*8:i*8+8], res64)
+		res64 := uint64(0)
+		res64 ^= cache[0][data[8*i+0]]
+		res64 ^= cache[1][data[8*i+1]]
+		res64 ^= cache[2][data[8*i+2]]
+		res64 ^= cache[3][data[8*i+3]]
+		res64 ^= cache[4][data[8*i+4]]
+		res64 ^= cache[5][data[8*i+5]]
+		res64 ^= cache[6][data[8*i+6]]
+		res64 ^= cache[7][data[8*i+7]]
+		binary.LittleEndian.PutUint64(out[i*8:i*8+8], res64)
 	}
-	return r
+	return out
 }
 
 func (h *Hash) MarshalBinary() (data []byte, err error) {
