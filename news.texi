@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.2.0}
+@item 5.2.0
+    MGM does not panic when short (tagless) message is verified.
+
 @anchor{Release 5.1.1}
 @item 5.1.1
     Tarball uses vendoring, instead of @env{GOPATH} overriding.

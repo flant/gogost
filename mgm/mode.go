@@ -234,7 +234,9 @@ func (mgm *MGM) Seal(dst, nonce, plaintext, additionalData []byte) []byte {
 func (mgm *MGM) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error) {
 	mgm.validateNonce(nonce)
 	mgm.validateSizes(ciphertext, additionalData)
-	if uint64(len(ciphertext)-mgm.tagSize) > mgm.maxSize {
+	if len(ciphertext) < mgm.TagSize {
+		return nil, errors.New("ciphertext is too short")
+	}
 	if uint64(len(ciphertext)-mgm.TagSize) > mgm.MaxSize {
 		panic("ciphertext is too big")
 	}
