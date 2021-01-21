@@ -409,25 +409,23 @@ func l(data *[BlockSize]byte) *[BlockSize]byte {
 }
 
 func (h *Hash) MarshalBinary() (data []byte, err error) {
-	data = make([]byte, len(MarshaledName)+1+8+3*BlockSize+len(h.buf))
+	data = make([]byte, len(MarshaledName)+1+8+2*BlockSize+len(h.buf))
 	copy(data, []byte(MarshaledName))
 	idx := len(MarshaledName)
 	data[idx] = byte(h.size)
 	idx += 1
 	binary.BigEndian.PutUint64(data[idx:idx+8], h.n)
 	idx += 8
-	copy(data[idx:], h.hsh[:])
+	copy(data[idx:], h.hsh)
 	idx += BlockSize
-	copy(data[idx:], h.chk[:])
-	idx += BlockSize
-	copy(data[idx:], h.tmp[:])
+	copy(data[idx:], h.chk)
 	idx += BlockSize
 	copy(data[idx:], h.buf)
 	return
 }
 
 func (h *Hash) UnmarshalBinary(data []byte) error {
-	expectedLen := len(MarshaledName) + 1 + 8 + 3*BlockSize
+	expectedLen := len(MarshaledName) + 1 + 8 + 2*BlockSize
 	if len(data) < expectedLen {
 		return fmt.Errorf("gogost/internal/gost34112012: len(data) != %d", expectedLen)
 	}
@@ -439,11 +437,9 @@ func (h *Hash) UnmarshalBinary(data []byte) error {
 	idx += 1
 	h.n = binary.BigEndian.Uint64(data[idx : idx+8])
 	idx += 8
-	copy(h.hsh[:], data[idx:])
+	copy(h.hsh, data[idx:])
 	idx += BlockSize
-	copy(h.chk[:], data[idx:])
-	idx += BlockSize
-	copy(h.tmp[:], data[idx:])
+	copy(h.chk, data[idx:])
 	idx += BlockSize
 	h.buf = data[idx:]
 	return nil
