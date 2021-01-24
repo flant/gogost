@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.4.0}
+@item 5.4.0
+    Even slightly less allocations in Streebog.
+
 @anchor{Release 5.3.0}
 @item 5.3.0
     ~16x speedup of Streebog, ~15x speedup of Kuznechik.

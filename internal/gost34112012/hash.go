@@ -288,16 +288,18 @@ func init() {
 }
 
 type Hash struct {
-	size   int
-	buf    []byte
-	n      uint64
-	hsh    []byte
-	chk    []byte
-	tmp    []byte
-	psBuf  []byte
-	eBuf   []byte
-	gBuf   []byte
-	addBuf []byte
+	size    int
+	buf     []byte
+	n       uint64
+	hsh     []byte
+	chk     []byte
+	tmp     []byte
+	psBuf   []byte
+	eMsgBuf []byte
+	eKBuf   []byte
+	eXorBuf []byte
+	gBuf    []byte
+	addBuf  []byte
 }
 
 // Create new hash object with specified size digest size.
@@ -306,14 +308,16 @@ func New(size int) *Hash {
 		panic("size must be either 32 or 64")
 	}
 	h := Hash{
-		size:   size,
-		hsh:    make([]byte, BlockSize),
-		chk:    make([]byte, BlockSize),
-		tmp:    make([]byte, BlockSize),
-		psBuf:  make([]byte, BlockSize),
-		eBuf:   make([]byte, BlockSize),
-		gBuf:   make([]byte, BlockSize),
-		addBuf: make([]byte, BlockSize),
+		size:    size,
+		hsh:     make([]byte, BlockSize),
+		chk:     make([]byte, BlockSize),
+		tmp:     make([]byte, BlockSize),
+		psBuf:   make([]byte, BlockSize),
+		eMsgBuf: make([]byte, BlockSize),
+		eKBuf:   make([]byte, BlockSize),
+		eXorBuf: make([]byte, BlockSize),
+		gBuf:    make([]byte, BlockSize),
+		addBuf:  make([]byte, BlockSize),
 	}
 	h.Reset()
 	return &h
@@ -344,8 +348,8 @@ func (h *Hash) Write(data []byte) (int, error) {
 	h.buf = append(h.buf, data...)
 	for len(h.buf) >= BlockSize {
 		copy(h.tmp, h.buf[:BlockSize])
-		h.hsh = h.g(h.n, h.hsh, h.tmp)
-		h.chk = h.add512bit(h.chk, h.tmp)
+		copy(h.hsh, h.g(h.n, h.hsh, h.tmp))
+		copy(h.chk, h.add512bit(h.chk, h.tmp))
 		h.n += BlockSize * 8
 		h.buf = h.buf[BlockSize:]
 	}
@@ -354,13 +358,14 @@ func (h *Hash) Write(data []byte) (int, error) {
 
 func (h *Hash) Sum(in []byte) []byte {
 	buf := make([]byte, BlockSize)
+	hsh := make([]byte, BlockSize)
 	copy(h.tmp, buf)
 	copy(buf, h.buf)
 	buf[len(h.buf)] = 1
-	hsh := h.g(h.n, h.hsh, buf)
+	copy(hsh, h.g(h.n, h.hsh, buf))
 	binary.LittleEndian.PutUint64(h.tmp, h.n+uint64(len(h.buf))*8)
-	hsh = h.g(0, hsh, h.tmp)
-	hsh = h.g(0, hsh, h.add512bit(h.chk, buf))
+	copy(hsh, h.g(0, hsh, h.tmp))
+	copy(hsh, h.g(0, hsh, h.add512bit(h.chk, buf)))
 	if h.size == 32 {
 		return append(in, hsh[BlockSize/2:]...)
 	}
@@ -377,27 +382,25 @@ func (h *Hash) add512bit(chk, data []byte) []byte {
 }
 
 func (h *Hash) g(n uint64, hsh, data []byte) []byte {
-	r := make([]byte, BlockSize)
-	copy(r, hsh)
-	r[0] ^= byte((n >> 0) & 0xFF)
-	r[1] ^= byte((n >> 8) & 0xFF)
-	r[2] ^= byte((n >> 16) & 0xFF)
-	r[3] ^= byte((n >> 24) & 0xFF)
-	r[4] ^= byte((n >> 32) & 0xFF)
-	r[5] ^= byte((n >> 40) & 0xFF)
-	r[6] ^= byte((n >> 48) & 0xFF)
-	r[7] ^= byte((n >> 56) & 0xFF)
-	return blockXor(h.gBuf, blockXor(h.gBuf, h.e(l(r, h.ps(r)), data), hsh), data)
+	out := h.gBuf
+	copy(out, hsh)
+	out[0] ^= byte((n >> 0) & 0xFF)
+	out[1] ^= byte((n >> 8) & 0xFF)
+	out[2] ^= byte((n >> 16) & 0xFF)
+	out[3] ^= byte((n >> 24) & 0xFF)
+	out[4] ^= byte((n >> 32) & 0xFF)
+	out[5] ^= byte((n >> 40) & 0xFF)
+	out[6] ^= byte((n >> 48) & 0xFF)
+	out[7] ^= byte((n >> 56) & 0xFF)
+	return blockXor(out, blockXor(out, h.e(l(out, h.ps(out)), data), hsh), data)
 }
 
 func (h *Hash) e(k, msg []byte) []byte {
-	msgBuf := make([]byte, BlockSize)
-	kBuf := make([]byte, BlockSize)
 	for i := 0; i < 12; i++ {
-		msg = l(msgBuf, h.ps(blockXor(h.eBuf, k, msg)))
-		k = l(kBuf, h.ps(blockXor(h.eBuf, k, c[i][:])))
+		msg = l(h.eMsgBuf, h.ps(blockXor(h.eXorBuf, k, msg)))
+		k = l(h.eKBuf, h.ps(blockXor(h.eXorBuf, k, c[i][:])))
 	}
-	return blockXor(h.eBuf, k, msg)
+	return blockXor(h.eXorBuf, k, msg)
 }
 
 func blockXor(dst, x, y []byte) []byte {
