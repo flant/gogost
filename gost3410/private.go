@@ -41,7 +41,7 @@ func NewPrivateKey(curve *Curve, raw []byte) (*PrivateKey, error) {
 	if k.Cmp(zero) == 0 {
 		return nil, errors.New("gogost/gost3410: zero private key")
 	}
-	return &PrivateKey{curve, k}, nil
+	return &PrivateKey{curve, k.Mod(k, curve.Q)}, nil
 }
 
 func GenPrivateKey(curve *Curve, rand io.Reader) (*PrivateKey, error) {

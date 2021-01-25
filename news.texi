@@ -3,6 +3,11 @@
 
 @table @strong
 
+@anchor{Release 5.5.0}
+@item 5.5.0
+    @code{gost3410.PrivateKey} is in @code{gost3410.Curve.Q} now. That
+    makes them more friendly with some implementations.
+
 @anchor{Release 5.4.0}
 @item 5.4.0
     Even slightly less allocations in Streebog.
