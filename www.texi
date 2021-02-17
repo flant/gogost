@@ -87,7 +87,7 @@ func main() {
 @end verbatim
 
 Please send questions, bug reports and patches to
-@url{https://lists.cypherpunks.ru/mailman/listinfo/gost, gost}
+@url{http://lists.cypherpunks.ru/gost.html, gost}
 mailing list. Announcements also go to this mailing list.
 
 @insertcopying

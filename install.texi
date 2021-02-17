@@ -67,7 +67,7 @@ uid   GoGOST releases <gogost at cypherpunks dot ru>
 
 @itemize
 
-@item @url{https://lists.cypherpunks.ru/mailman/listinfo/gost, gost} maillist
+@item @url{http://lists.cypherpunks.ru/gost.html, gost} maillist
 
 @item
 @example

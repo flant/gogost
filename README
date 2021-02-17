@@ -63,8 +63,8 @@ GoGOST'es home page is: http://www.gogost.cypherpunks.ru/
 You can read about GOST algorithms more: http://www.gost.cypherpunks.ru/
 
 Please send questions, bug reports and patches to
-https://lists.cypherpunks.ru/mailman/listinfo/gost
-mailing list. Announcements also go to this mailing list.
+http://lists.cypherpunks.ru/gost.html mailing list.
+Announcements also go to this mailing list.
 
 Development Git source code repository currently is located here:
 http://www.git.cypherpunks.ru/?p=gogost.git;a=summary

@@ -121,7 +121,7 @@ GPG key: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
          GoGOST releases <gogost at cypherpunks dot ru>
 
 Please send questions regarding the use of GoGOST, bug reports and patches
-to mailing list: https://lists.cypherpunks.ru/mailman/listinfo/gost
+to mailing list: http://lists.cypherpunks.ru/gost.html
 EOF
 
 cat <<EOF
@@ -154,7 +154,7 @@ GPG ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
 
 Пожалуйста, все вопросы касающиеся использования GoGOST, отчёты об
 ошибках и патчи отправляйте в gost почтовую рассылку:
-https://lists.cypherpunks.ru/mailman/listinfo/gost
+http://lists.cypherpunks.ru/gost.html
 EOF
 
 mv $tmp/$tarball $tmp/"$tarball".sig $cur/gogost.html/
