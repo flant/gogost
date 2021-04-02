@@ -3,6 +3,28 @@
 
 @table @strong
 
+@anchor{Release 5.6.0}
+@item 5.6.0
+    @itemize
+    @item Add @code{gost3410.CurveIdtc26gost341012512paramSetTest} curve
+    @item More curve aliases:
+@verbatim
+CurveIdGostR34102001CryptoProAParamSet -> CurveIdtc26gost341012256paramSetB
+CurveIdGostR34102001CryptoProBParamSet -> CurveIdtc26gost341012256paramSetC
+CurveIdGostR34102001CryptoProCParamSet -> CurveIdtc26gost341012256paramSetD
+CurveIdGostR34102001CryptoProXchAParamSet -> CurveIdGostR34102001CryptoProAParamSet
+CurveIdGostR34102001CryptoProXchBParamSet -> CurveIdGostR34102001CryptoProCParamSet
+CurveIdtc26gost34102012256paramSetA -> CurveIdtc26gost341012256paramSetA
+CurveIdtc26gost34102012256paramSetB -> CurveIdtc26gost341012256paramSetB
+CurveIdtc26gost34102012256paramSetC -> CurveIdtc26gost341012256paramSetC
+CurveIdtc26gost34102012256paramSetD -> CurveIdtc26gost341012256paramSetD
+CurveIdtc26gost34102012512paramSetTest -> CurveIdtc26gost341012512paramSetTest
+CurveIdtc26gost34102012512paramSetA -> CurveIdtc26gost341012512paramSetA
+CurveIdtc26gost34102012512paramSetB -> CurveIdtc26gost341012512paramSetB
+CurveIdtc26gost34102012512paramSetC -> CurveIdtc26gost341012512paramSetC
+@end verbatim
+    @end itemize
+
 @anchor{Release 5.5.0}
 @item 5.5.0
     @code{gost3410.PrivateKey} is in @code{gost3410.Curve.Q} now. That

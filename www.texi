@@ -73,7 +73,7 @@ func main() {
     hasher := gost34112012256.New()
     _, err := hasher.Write(data)
     dgst := hasher.Sum(nil)
-    curve := gost3410.CurveIdtc26gost34102012256paramSetB()
+    curve := gost3410.CurveIdtc26gost341012256paramSetB()
     prvRaw := make([]byte, 32)
     _, err = io.ReadFull(rand.Reader, prvRaw)
     prv, err := gost3410.NewPrivateKey(curve, prvRaw)
