@@ -49,6 +49,7 @@ Currently supported algorithms are:
 @item GOST R 34.12-2015 64-bit block cipher Магма (Magma)
 @item GOST R 34.13-2015 padding methods
 @item MGM AEAD mode for 64 and 128 bit ciphers
+    (@url{https://tools.ietf.org/html/rfc9058.html, RFC 9058})
 @item TLSTREE keyscheduling function
 @item ESPTREE/IKETREE (IKE* is the same as ESP*) keyscheduling function
 @item @code{PRF_IPSEC_PRFPLUS_GOSTR3411_2012_@{256,512@}} and generic

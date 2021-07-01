@@ -18,7 +18,7 @@ GOST is GOvernment STandard of Russian Federation (and Soviet Union).
 * GOST R 34.12-2015 128-bit block cipher Кузнечик (Kuznechik) (RFC 7801)
 * GOST R 34.12-2015 64-bit block cipher Магма (Magma)
 * GOST R 34.13-2015 padding methods
-* MGM AEAD mode for 64 and 128 bit ciphers (Р 1323565.1.026–2019)
+* MGM AEAD mode for 64 and 128 bit ciphers (RFC 9058)
 * TLSTREE keyscheduling function
 * ESPTREE/IKETREE (IKE* is the same as ESP*) keyscheduling function
 * PRF_IPSEC_PRFPLUS_GOSTR3411_2012_{256,512} and generic prf+ functions
