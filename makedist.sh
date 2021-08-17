@@ -70,8 +70,8 @@ rm -f \
 perl -i -npe "s/build/build -mod=vendor/" default.do
 perl -i -npe "s/test/test -mod=vendor/" bench.do
 
-find . -type d -exec chmod 755 {} \;
-find . -type f -exec chmod 644 {} \;
+find . -type d -exec chmod 755 {} +
+find . -type f -exec chmod 644 {} +
 chmod +x contrib/do
 
 cd ..
