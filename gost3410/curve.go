@@ -159,3 +159,15 @@ func (c *Curve) Exp(degree, xS, yS *big.Int) (*big.Int, *big.Int, error) {
 	}
 	return tx, ty, nil
 }
+
+func (our *Curve) Equal(their *Curve) bool {
+	return our.P.Cmp(their.P) == 0 &&
+		our.Q.Cmp(their.Q) == 0 &&
+		our.A.Cmp(their.A) == 0 &&
+		our.B.Cmp(their.B) == 0 &&
+		our.X.Cmp(their.X) == 0 &&
+		our.Y.Cmp(their.Y) == 0 &&
+		((our.E == nil && their.E == nil) || our.E.Cmp(their.E) == 0) &&
+		((our.D == nil && their.D == nil) || our.D.Cmp(their.D) == 0) &&
+		our.Co.Cmp(their.Co) == 0
+}

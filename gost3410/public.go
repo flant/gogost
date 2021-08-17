@@ -16,6 +16,7 @@
 package gost3410
 
 import (
+	"crypto"
 	"fmt"
 	"math/big"
 )
@@ -106,4 +107,12 @@ func (pub *PublicKey) VerifyDigest(digest, signature []byte) (bool, error) {
 	}
 	lm.Mod(lm, pub.C.Q)
 	return lm.Cmp(r) == 0, nil
+}
+
+func (our *PublicKey) Equal(theirKey crypto.PublicKey) bool {
+	their, ok := theirKey.(*PublicKey)
+	if !ok {
+		return false
+	}
+	return our.X.Cmp(their.X) == 0 && our.X.Cmp(their.Y) == 0 && our.C.Equal(their.C)
 }
