@@ -76,10 +76,14 @@ chmod +x contrib/do
 
 cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"
-xz -9 gogost-"$release".tar
-gpg --detach-sign --sign --local-user 82343436696FC85A gogost-"$release".tar.xz
+zstd -19 -v gogost-"$release".tar
+tarball=gogost-"$release".tar.zst
+gpg --detach-sign --sign --local-user 82343436696FC85A $tarball
+gpg --enarmor < "$tarball".sig |
+    sed "/^Comment:/d ; s/ARMORED FILE/SIGNATURE/" > "$tarball".asc
+meta4-create -file "$tarball" -mtime "$tarball" -sig "$tarball".asc \
+    http://www.gogost.cypherpunks.ru/"$tarball" > "$tarball".meta4
 
-tarball=gogost-"$release".tar.xz
 size=$(( $(stat -f %z $tarball) / 1024 ))
 hash=$(gpg --print-md SHA256 < $tarball)
 hashsb=$($HOME/work/gogost/streebog256 < $tarball)
@@ -88,7 +92,10 @@ release_date=$(date "+%Y-%m-%d")
 cat <<EOF
 An entry for documentation:
 @item @ref{Release $release, $release} @tab $release_date @tab $size KiB
-@tab @url{gogost-${release}.tar.xz, link} @url{gogost-${release}.tar.xz.sig, sign}
+@tab
+    @url{$tarball.meta4, meta4}
+    @url{$tarball, link}
+    @url{$tarball.sig, sig}
 @tab @code{$hash}
 @tab @code{$hashsb}
 EOF
@@ -112,8 +119,8 @@ GoGOST'es home page is: http://www.gogost.cypherpunks.ru/
 
 Source code and its signature for that version can be found here:
 
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.sig
 
 Streebog-256 hash: $hashsb
 SHA256 hash: $hash
@@ -144,8 +151,8 @@ GoGOST это свободное программное обеспечение �
 
 Исходный код и его подпись для этой версии могут быть найдены здесь:
 
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz ($size KiB)
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.xz.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.sig
 
 Streebog-256 хэш: $hashsb
 SHA256 хэш: $hash
@@ -157,5 +164,5 @@ GPG ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
 http://lists.cypherpunks.ru/gost.html
 EOF
 
-mv $tmp/$tarball $tmp/"$tarball".sig $cur/gogost.html/
+mv $tmp/$tarball $tmp/"$tarball".sig $tmp/"$tarball".meta4 $cur/gogost.html/
 rm -fr $tmp
