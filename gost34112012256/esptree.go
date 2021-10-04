@@ -32,7 +32,7 @@ func NewESPTree(keyRoot []byte) *ESPTree {
 		keyRoot: key,
 		key:     make([]byte, Size),
 	}
-	t.isPrev[0] += 1 // invalidate cache
+	t.isPrev[0]++ // invalidate cache
 	t.DeriveCached([]byte{0x00, 0x00, 0x00, 0x00, 0x00})
 	return t
 }
