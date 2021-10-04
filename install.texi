@@ -5,10 +5,10 @@ Preferable way is to download tarball with the signature from
 website and, for example, run tests with benchmarks:
 
 @example
-$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz
-$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.xz.sig
-$ gpg --verify gogost-@value{VERSION}.tar.xz.sig gogost-@value{VERSION}.tar.xz
-$ xz --decompress --stdout gogost-@value{VERSION}.tar.xz | tar xf -
+$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst
+$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst.sig
+$ gpg --verify gogost-@value{VERSION}.tar.zst.sig gogost-@value{VERSION}.tar.zst
+$ zstd --decompress --stdout gogost-@value{VERSION}.tar.zst | tar xf -
 $ cd gogost-@value{VERSION}
 $ redo all
 $ echo hello world | ./streebog256
