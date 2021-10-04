@@ -114,5 +114,5 @@ func (our *PublicKey) Equal(theirKey crypto.PublicKey) bool {
 	if !ok {
 		return false
 	}
-	return our.X.Cmp(their.X) == 0 && our.X.Cmp(their.Y) == 0 && our.C.Equal(their.C)
+	return our.X.Cmp(their.X) == 0 && our.Y.Cmp(their.Y) == 0 && our.C.Equal(their.C)
 }
