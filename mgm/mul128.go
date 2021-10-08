@@ -15,54 +15,42 @@
 
 package mgm
 
-import (
-	"math/big"
-)
+import "encoding/binary"
 
-const Mul128MaxBit = 128 - 1
-
-var R128 = big.NewInt(0).SetBytes([]byte{
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87,
-})
-
-type mul128 struct {
-	x   *big.Int
-	y   *big.Int
-	z   *big.Int
-	buf [16]byte
-}
+type mul128 struct{ buf [16]byte }
 
 func newMul128() *mul128 {
-	return &mul128{
-		x: big.NewInt(0),
-		y: big.NewInt(0),
-		z: big.NewInt(0),
+	return &mul128{}
+}
+
+func gf128half(n int, t, x0, x1, z0, z1 uint64) (uint64, uint64, uint64, uint64, uint64) {
+	var sign bool
+	for i := 0; i < n; i++ {
+		if t&1 > 0 {
+			z0, z1 = z0^x0, z1^x1
+		}
+		t >>= 1
+		sign = x1>>63 > 0
+		x1 = (x1 << 1) ^ (x0 >> 63)
+		x0 <<= 1
+		if sign {
+			x0 ^= 0x87
+		}
 	}
+	return t, x0, x1, z0, z1
 }
 
 func (mul *mul128) Mul(x, y []byte) []byte {
-	mul.x.SetBytes(x)
-	mul.y.SetBytes(y)
-	mul.z.SetInt64(0)
-	for mul.y.BitLen() != 0 {
-		if mul.y.Bit(0) == 1 {
-			mul.z.Xor(mul.z, mul.x)
-		}
-		if mul.x.Bit(Mul128MaxBit) == 1 {
-			mul.x.SetBit(mul.x, Mul128MaxBit, 0)
-			mul.x.Lsh(mul.x, 1)
-			mul.x.Xor(mul.x, R128)
-		} else {
-			mul.x.Lsh(mul.x, 1)
-		}
-		mul.y.Rsh(mul.y, 1)
+	x1 := binary.BigEndian.Uint64(x[:8])
+	x0 := binary.BigEndian.Uint64(x[8:])
+	y1 := binary.BigEndian.Uint64(y[:8])
+	y0 := binary.BigEndian.Uint64(y[8:])
+	t, x0, x1, z0, z1 := gf128half(64, y0, x0, x1, 0, 0)
+	t, x0, x1, z0, z1 = gf128half(63, y1, x0, x1, z0, z1)
+	if t&1 > 0 {
+		z0, z1 = z0^x0, z1^x1
 	}
-	zBytes := mul.z.Bytes()
-	rem := len(x) - len(zBytes)
-	for i := 0; i < rem; i++ {
-		mul.buf[i] = 0
-	}
-	copy(mul.buf[rem:], zBytes)
+	binary.BigEndian.PutUint64(mul.buf[:8], z1)
+	binary.BigEndian.PutUint64(mul.buf[8:], z0)
 	return mul.buf[:]
 }
