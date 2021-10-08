@@ -21,22 +21,10 @@ import (
 	"crypto/hmac"
 	"encoding/binary"
 	"errors"
-	"math/big"
 )
 
-var (
-	R64  *big.Int = big.NewInt(0)
-	R128 *big.Int = big.NewInt(0)
-)
-
-func init() {
-	R64.SetBytes([]byte{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1b,
-	})
-	R128.SetBytes([]byte{
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87,
-	})
+type Mul interface {
+	Mul(x, y []byte) []byte
 }
 
 type MGM struct {
@@ -49,13 +37,7 @@ type MGM struct {
 	bufC      []byte
 	padded    []byte
 	sum       []byte
-
-	x      *big.Int
-	y      *big.Int
-	z      *big.Int
-	maxBit int
-	r      *big.Int
-	mulBuf []byte
+	mul       Mul
 }
 
 func NewMGM(cipher cipher.Block, tagSize int) (cipher.AEAD, error) {
@@ -76,17 +58,11 @@ func NewMGM(cipher cipher.Block, tagSize int) (cipher.AEAD, error) {
 		bufC:      make([]byte, blockSize),
 		padded:    make([]byte, blockSize),
 		sum:       make([]byte, blockSize),
-		x:         big.NewInt(0),
-		y:         big.NewInt(0),
-		z:         big.NewInt(0),
-		mulBuf:    make([]byte, blockSize),
 	}
 	if blockSize == 8 {
-		mgm.maxBit = 64 - 1
-		mgm.r = R64
+		mgm.mul = newMul64()
 	} else {
-		mgm.maxBit = 128 - 1
-		mgm.r = R128
+		mgm.mul = newMul128()
 	}
 	return &mgm, nil
 }
@@ -148,7 +124,7 @@ func (mgm *MGM) auth(out, text, ad []byte) {
 		xor(                                   // sum (xor)= H_i (x) A_i
 			mgm.sum,
 			mgm.sum,
-			mgm.mul(mgm.bufC, ad[:mgm.BlockSize]),
+			mgm.mul.Mul(mgm.bufC, ad[:mgm.BlockSize]),
 		)
 		incr(mgm.bufP[:mgm.BlockSize/2]) // Z_{i+1} = incr_l(Z_i)
 		ad = ad[mgm.BlockSize:]
@@ -159,7 +135,7 @@ func (mgm *MGM) auth(out, text, ad []byte) {
 			mgm.padded[i] = 0
 		}
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP)
-		xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufC, mgm.padded))
+		xor(mgm.sum, mgm.sum, mgm.mul.Mul(mgm.bufC, mgm.padded))
 		incr(mgm.bufP[:mgm.BlockSize/2])
 	}
 
@@ -168,7 +144,7 @@ func (mgm *MGM) auth(out, text, ad []byte) {
 		xor(                                   // sum (xor)= H_{h+j} (x) C_j
 			mgm.sum,
 			mgm.sum,
-			mgm.mul(mgm.bufC, text[:mgm.BlockSize]),
+			mgm.mul.Mul(mgm.bufC, text[:mgm.BlockSize]),
 		)
 		incr(mgm.bufP[:mgm.BlockSize/2]) // Z_{h+j+1} = incr_l(Z_{h+j})
 		text = text[mgm.BlockSize:]
@@ -179,7 +155,7 @@ func (mgm *MGM) auth(out, text, ad []byte) {
 			mgm.padded[i] = 0
 		}
 		mgm.cipher.Encrypt(mgm.bufC, mgm.bufP)
-		xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufC, mgm.padded))
+		xor(mgm.sum, mgm.sum, mgm.mul.Mul(mgm.bufC, mgm.padded))
 		incr(mgm.bufP[:mgm.BlockSize/2])
 	}
 
@@ -193,7 +169,7 @@ func (mgm *MGM) auth(out, text, ad []byte) {
 		binary.BigEndian.PutUint64(mgm.bufC[mgm.BlockSize/2:], uint64(textLen))
 	}
 	// sum (xor)= H_{h+q+1} (x) (len(A) || len(C))
-	xor(mgm.sum, mgm.sum, mgm.mul(mgm.bufP, mgm.bufC))
+	xor(mgm.sum, mgm.sum, mgm.mul.Mul(mgm.bufC, mgm.bufP))
 	mgm.cipher.Encrypt(mgm.bufP, mgm.sum) // E_K(sum)
 	copy(out, mgm.bufP[:mgm.TagSize])     // MSB_S(E_K(sum))
 }

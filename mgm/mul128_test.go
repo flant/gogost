@@ -15,28 +15,21 @@
 
 package mgm
 
-func (mgm *MGM) mul(xBuf, yBuf []byte) []byte {
-	mgm.x.SetBytes(xBuf)
-	mgm.y.SetBytes(yBuf)
-	mgm.z.SetInt64(0)
-	for mgm.y.BitLen() != 0 {
-		if mgm.y.Bit(0) == 1 {
-			mgm.z.Xor(mgm.z, mgm.x)
-		}
-		if mgm.x.Bit(mgm.maxBit) == 1 {
-			mgm.x.SetBit(mgm.x, mgm.maxBit, 0)
-			mgm.x.Lsh(mgm.x, 1)
-			mgm.x.Xor(mgm.x, mgm.r)
-		} else {
-			mgm.x.Lsh(mgm.x, 1)
-		}
-		mgm.y.Rsh(mgm.y, 1)
+import (
+	"crypto/rand"
+	"testing"
+
+	"go.cypherpunks.ru/gogost/v5/gost3412128"
+)
+
+func BenchmarkMul128(b *testing.B) {
+	x := make([]byte, gost3412128.BlockSize)
+	y := make([]byte, gost3412128.BlockSize)
+	rand.Read(x)
+	rand.Read(y)
+	mul := newMul128()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		mul.Mul(x, y)
 	}
-	zBytes := mgm.z.Bytes()
-	rem := len(xBuf) - len(zBytes)
-	for i := 0; i < rem; i++ {
-		mgm.mulBuf[i] = 0
-	}
-	copy(mgm.mulBuf[rem:], zBytes)
-	return mgm.mulBuf
 }

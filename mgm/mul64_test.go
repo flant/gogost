@@ -17,10 +17,8 @@ package mgm
 
 import (
 	"crypto/rand"
-	"math/big"
 	"testing"
 
-	"go.cypherpunks.ru/gogost/v5/gost3412128"
 	"go.cypherpunks.ru/gogost/v5/gost341264"
 )
 
@@ -29,35 +27,9 @@ func BenchmarkMul64(b *testing.B) {
 	y := make([]byte, gost341264.BlockSize)
 	rand.Read(x)
 	rand.Read(y)
-	mgm := MGM{
-		x:      big.NewInt(0),
-		y:      big.NewInt(0),
-		z:      big.NewInt(0),
-		maxBit: 64 - 1,
-		r:      R64,
-		mulBuf: make([]byte, gost341264.BlockSize),
-	}
+	mul := newMul64()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		mgm.mul(x, y)
-	}
-}
-
-func BenchmarkMul128(b *testing.B) {
-	x := make([]byte, gost3412128.BlockSize)
-	y := make([]byte, gost3412128.BlockSize)
-	rand.Read(x)
-	rand.Read(y)
-	mgm := MGM{
-		x:      big.NewInt(0),
-		y:      big.NewInt(0),
-		z:      big.NewInt(0),
-		maxBit: 128 - 1,
-		r:      R128,
-		mulBuf: make([]byte, gost3412128.BlockSize),
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		mgm.mul(x, y)
+		mul.Mul(x, y)
 	}
 }
