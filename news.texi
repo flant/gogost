@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.8.0}
+@item 5.8.0
+Faster Kuznechik and ~3x faster Kuznechik-MGM.
+
 @anchor{Release 5.7.0}
 @item 5.7.0
 Go 1.17 requires @code{gost3410.PublicKey} to have @code{Equal} method.
