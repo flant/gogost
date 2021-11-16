@@ -28,8 +28,8 @@ type PrivateKey struct {
 	Key *big.Int
 }
 
-func NewPrivateKey(curve *Curve, raw []byte) (*PrivateKey, error) {
-	pointSize := curve.PointSize()
+func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
+	pointSize := c.PointSize()
 	if len(raw) != pointSize {
 		return nil, fmt.Errorf("gogost/gost3410: len(key) != %d", pointSize)
 	}
@@ -41,15 +41,15 @@ func NewPrivateKey(curve *Curve, raw []byte) (*PrivateKey, error) {
 	if k.Cmp(zero) == 0 {
 		return nil, errors.New("gogost/gost3410: zero private key")
 	}
-	return &PrivateKey{curve, k.Mod(k, curve.Q)}, nil
+	return &PrivateKey{c, k.Mod(k, c.Q)}, nil
 }
 
-func GenPrivateKey(curve *Curve, rand io.Reader) (*PrivateKey, error) {
-	raw := make([]byte, curve.PointSize())
+func GenPrivateKey(c *Curve, rand io.Reader) (*PrivateKey, error) {
+	raw := make([]byte, c.PointSize())
 	if _, err := io.ReadFull(rand, raw); err != nil {
 		return nil, err
 	}
-	return NewPrivateKey(curve, raw)
+	return NewPrivateKey(c, raw)
 }
 
 func (prv *PrivateKey) Raw() []byte {

@@ -27,8 +27,8 @@ type PublicKey struct {
 	Y *big.Int
 }
 
-func NewPublicKey(curve *Curve, raw []byte) (*PublicKey, error) {
-	pointSize := curve.PointSize()
+func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
+	pointSize := c.PointSize()
 	key := make([]byte, 2*pointSize)
 	if len(raw) != len(key) {
 		return nil, fmt.Errorf("gogost/gost3410: len(key) != %d", len(key))
@@ -37,7 +37,7 @@ func NewPublicKey(curve *Curve, raw []byte) (*PublicKey, error) {
 		key[i] = raw[len(raw)-i-1]
 	}
 	return &PublicKey{
-		curve,
+		c,
 		bytes2big(key[pointSize : 2*pointSize]),
 		bytes2big(key[:pointSize]),
 	}, nil
