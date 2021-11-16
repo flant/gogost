@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.9.0}
+@item 5.9.0
+@code{gost3410} is more thread-safe.
+
 @anchor{Release 5.8.0}
 @item 5.8.0
 Faster Kuznechik and ~3x faster Kuznechik-MGM.

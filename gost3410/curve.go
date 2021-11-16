@@ -48,11 +48,6 @@ type Curve struct {
 	X *big.Int
 	Y *big.Int
 
-	// Temporary variable for the add method
-	t  *big.Int
-	tx *big.Int
-	ty *big.Int
-
 	// Cached s/t parameters for Edwards curve points conversion
 	edS *big.Int
 	edT *big.Int
@@ -67,9 +62,6 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 		B:    b,
 		X:    x,
 		Y:    y,
-		t:    big.NewInt(0),
-		tx:   big.NewInt(0),
-		ty:   big.NewInt(0),
 	}
 	r1 := big.NewInt(0)
 	r2 := big.NewInt(0)
@@ -107,38 +99,39 @@ func (c *Curve) pos(v *big.Int) {
 }
 
 func (c *Curve) add(p1x, p1y, p2x, p2y *big.Int) {
+	var t, tx, ty big.Int
 	if p1x.Cmp(p2x) == 0 && p1y.Cmp(p2y) == 0 {
 		// double
-		c.t.Mul(p1x, p1x)
-		c.t.Mul(c.t, bigInt3)
-		c.t.Add(c.t, c.A)
-		c.tx.Mul(bigInt2, p1y)
-		c.tx.ModInverse(c.tx, c.P)
-		c.t.Mul(c.t, c.tx)
-		c.t.Mod(c.t, c.P)
+		t.Mul(p1x, p1x)
+		t.Mul(&t, bigInt3)
+		t.Add(&t, c.A)
+		tx.Mul(bigInt2, p1y)
+		tx.ModInverse(&tx, c.P)
+		t.Mul(&t, &tx)
+		t.Mod(&t, c.P)
 	} else {
-		c.tx.Sub(p2x, p1x)
-		c.tx.Mod(c.tx, c.P)
-		c.pos(c.tx)
-		c.ty.Sub(p2y, p1y)
-		c.ty.Mod(c.ty, c.P)
-		c.pos(c.ty)
-		c.t.ModInverse(c.tx, c.P)
-		c.t.Mul(c.t, c.ty)
-		c.t.Mod(c.t, c.P)
+		tx.Sub(p2x, p1x)
+		tx.Mod(&tx, c.P)
+		c.pos(&tx)
+		ty.Sub(p2y, p1y)
+		ty.Mod(&ty, c.P)
+		c.pos(&ty)
+		t.ModInverse(&tx, c.P)
+		t.Mul(&t, &ty)
+		t.Mod(&t, c.P)
 	}
-	c.tx.Mul(c.t, c.t)
-	c.tx.Sub(c.tx, p1x)
-	c.tx.Sub(c.tx, p2x)
-	c.tx.Mod(c.tx, c.P)
-	c.pos(c.tx)
-	c.ty.Sub(p1x, c.tx)
-	c.ty.Mul(c.ty, c.t)
-	c.ty.Sub(c.ty, p1y)
-	c.ty.Mod(c.ty, c.P)
-	c.pos(c.ty)
-	p1x.Set(c.tx)
-	p1y.Set(c.ty)
+	tx.Mul(&t, &t)
+	tx.Sub(&tx, p1x)
+	tx.Sub(&tx, p2x)
+	tx.Mod(&tx, c.P)
+	c.pos(&tx)
+	ty.Sub(p1x, &tx)
+	ty.Mul(&ty, &t)
+	ty.Sub(&ty, p1y)
+	ty.Mod(&ty, c.P)
+	c.pos(&ty)
+	p1x.Set(&tx)
+	p1y.Set(&ty)
 }
 
 func (c *Curve) Exp(degree, xS, yS *big.Int) (*big.Int, *big.Int, error) {
