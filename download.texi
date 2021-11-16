@@ -1,6 +1,14 @@
 @multitable {XXXXX} {XXXX-XX-XX} {XXXX KiB} {meta4 link sig} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
 @headitem Version @tab Date @tab Size @tab Tarball @tab SHA256 checksum @tab Streebog-256 checksum
 
+@item @ref{Release 5.9.0, 5.9.0} @tab 2021-11-16 @tab 67 KiB
+@tab
+    @url{gogost-5.9.0.tar.zst.meta4, meta4}
+    @url{gogost-5.9.0.tar.zst, link}
+    @url{gogost-5.9.0.tar.zst.sig, sig}
+@tab @code{39E7A29D 6958EFA5 16ECC4D0 0837B175 41EFC83F EA7E0E56 85A35933 EFE250FE}
+@tab @code{fce84cfd5c5f275641a8c98b20639b16c9463dad134bc61d154d73da42b755d4}
+
 @item @ref{Release 5.8.0, 5.8.0} @tab 2021-10-08 @tab 67 KiB
 @tab
     @url{gogost-5.8.0.tar.zst.meta4, meta4}
