@@ -72,7 +72,7 @@ uid   GoGOST releases <gogost at cypherpunks dot ru>
 @item
 @example
 $ gpg --auto-key-locate dane --locate-keys gogost at cypherpunks dot ru
-$ gpg --auto-key-locate wkd --locate-keys gogost at cypherpunks dot ru
+$ gpg --auto-key-locate  wkd --locate-keys gogost at cypherpunks dot ru
 @end example
 
 @item
