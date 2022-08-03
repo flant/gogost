@@ -13,5 +13,14 @@ ${MAKEINFO:-makeinfo} --html \
     --set-customization-variable CLOSE_QUOTE_SYMBOL=\" \
     --set-customization-variable OPEN_QUOTE_SYMBOL=\" \
     -o $html www.texi
+(
+    cd $html
+    export ATOM_ID="34c4c603-9fa7-4441-a089-881d216d8638"
+    export NAME=GoGOST
+    export BASE_URL=http://www.gogost.cypherpunks.ru
+    export AUTHOR_EMAIL=gogost@cypherpunks.ru
+    ~/work/releases-feed/releases.atom.zsh
+)
+perl -i -npe 'print "<link rel=\"alternate\" title=\"Releases\" href=\"releases.atom\" type=\"application/atom+xml\">\n" if /^<\/head>/' $html/Download.html
 find $html -type d -exec chmod 755 {} +
 find $html -type f -exec chmod 644 {} +
