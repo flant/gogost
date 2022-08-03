@@ -82,7 +82,8 @@ gpg --detach-sign --sign --local-user 82343436696FC85A $tarball
 gpg --enarmor < "$tarball".sig |
     sed "/^Comment:/d ; s/ARMORED FILE/SIGNATURE/" > "$tarball".asc
 meta4-create -file "$tarball" -mtime "$tarball" -sig "$tarball".asc \
-    http://www.gogost.cypherpunks.ru/"$tarball" > "$tarball".meta4
+    http://www.gogost.cypherpunks.ru/"$tarball" \
+    http://y.www.gogost.cypherpunks.ru/"$tarball" > "$tarball".meta4
 
 size=$(( $(stat -f %z $tarball) / 1024 ))
 hash=$(gpg --print-md SHA256 < $tarball)
