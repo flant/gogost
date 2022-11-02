@@ -12,7 +12,7 @@ git checkout v$release
 redo VERSION
 go mod vendor
 mkdir contrib
-cp ~/work/redo/minimal/do contrib/do
+cp ~/work/redo/apenwarr/minimal/do contrib/do
 
 cat > download.texi <<EOF
 You can obtain releases source code prepared tarballs on
