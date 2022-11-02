@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.9.1}
+@item 5.9.1
+Updated and cleaned up @file{go.sum}.
+
 @anchor{Release 5.9.0}
 @item 5.9.0
 @code{gost3410} is more thread-safe.
