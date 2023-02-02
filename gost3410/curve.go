@@ -164,3 +164,7 @@ func (our *Curve) Equal(their *Curve) bool {
 		((our.D == nil && their.D == nil) || our.D.Cmp(their.D) == 0) &&
 		our.Co.Cmp(their.Co) == 0
 }
+
+func (c *Curve) String() string {
+	return c.Name
+}
