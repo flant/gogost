@@ -191,7 +191,6 @@ func main() {
 	spki = spki[:20]
 
 	cerTmpl := x509.Certificate{
-		KeyUsage:           x509.KeyUsageDigitalSignature,
 		NotBefore:          notBefore,
 		NotAfter:           notAfter,
 		SerialNumber:       sn,
@@ -202,9 +201,10 @@ func main() {
 	if *ca {
 		cerTmpl.BasicConstraintsValid = true
 		cerTmpl.IsCA = true
-		cerTmpl.KeyUsage |= x509.KeyUsageCertSign
+		cerTmpl.KeyUsage = x509.KeyUsageCertSign
 	} else {
 		cerTmpl.DNSNames = []string{*cn}
+		cerTmpl.KeyUsage = x509.KeyUsageDigitalSignature
 	}
 
 	if caCer == nil {
