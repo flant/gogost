@@ -200,6 +200,7 @@ func main() {
 		SubjectKeyId:       spki,
 	}
 	if *ca {
+		cerTmpl.BasicConstraintsValid = true
 		cerTmpl.IsCA = true
 		cerTmpl.KeyUsage |= x509.KeyUsageCertSign
 	} else {
