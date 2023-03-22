@@ -80,25 +80,44 @@ $ gpg --auto-key-locate  wkd --locate-keys gogost at cypherpunks dot ru
 
 @end itemize
 
-GoGOST is also @command{go get}-able. For example to use
+GoGOST is also @command{go get}-able. For example to install
 @command{streebog256} utility:
 
 @example
-$ go get go.cypherpunks.ru/gogost/cmd/streebog256
+$ go install go.cypherpunks.ru/gogost/v5/cmd/streebog256@@latest
 @end example
 
-If you have problems with @code{*.golang.org}'s inability to verify
-authenticity of @code{go.cypherpunks.ru} TLS connection, then you can
-disable their usage by setting @env{GOPRIVATE=go.cypherpunks.ru}. You
-can override CA certificate file path with @env{SSL_CERT_FILE} and
-@env{GIT_SSL_CAINFO} environment variables.
+@code{go.cypherpunks.ru} uses @code{ca.cypherpunks.ru} X.509 CA
+authority, that may complicate installation:
 
-Also you can use @code{replace} feature inside your @file{go.mod}, like:
+@itemize
+
+@item Go's default @code{proxy.golang.org} and @code{sum.golang.org}
+services won't be able to verify @code{go.cypherpunks.ru}'s TLS
+authenticity, because there are no common trust anchors. You can skip
+their usage by setting @env{$GOPRIVATE=go.cypherpunks.ru}.
+
+@item You can (temporarily) override CA certificate bundle during installation:
+
+@example
+$ [fetch|wget] http://www.ca.cypherpunks.ru/cert.pem
+$ [fetch|wget] http://www.ca.cypherpunks.ru/cert.pem.asc
+$ gpg --auto-key-locate dane --locate-keys stargrave at stargrave dot org
+$ gpg --auto-key-locate  wkd --locate-keys stargrave at gnupg dot net
+$ gpg --verify cert.pem.asc
+$ SSL_CERT_FILE=`pwd`/cert.pem GIT_SSL_CAINFO=`pwd`/cert.pem go get \
+    go.cypherpunks.ru/gogost/v5
+@end example
+
+@item You can unpack tarball somewhere and use @code{replace} command in
+your local @file{go.mod}:
 
 @example
 require go.cypherpunks.ru/gogost/v5 v@value{VERSION}
 replace go.cypherpunks.ru/gogost/v5 => /path/to/gogost-@value{VERSION}
 @end example
+
+@end itemize
 
 You can obtain development source code with
 @command{git clone git://git.cypherpunks.ru/gogost.git}
