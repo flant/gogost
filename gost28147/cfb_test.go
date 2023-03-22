@@ -43,12 +43,12 @@ func TestCFBCryptomanager(t *testing.T) {
 	tmp := make([]byte, 16)
 	fe := c.NewCFBEncrypter(iv)
 	fe.XORKeyStream(tmp, pt)
-	if bytes.Compare(tmp, ct) != 0 {
+	if !bytes.Equal(tmp, ct) {
 		t.Fatal("encryption failed")
 	}
 	fd := c.NewCFBDecrypter(iv)
 	fd.XORKeyStream(tmp, ct)
-	if bytes.Compare(tmp, pt) != 0 {
+	if !bytes.Equal(tmp, pt) {
 		t.Fatal("decryption failed")
 	}
 }
@@ -65,7 +65,7 @@ func TestCFBRandom(t *testing.T) {
 		fd := c.NewCFBDecrypter(iv[:])
 		pt2 := make([]byte, len(ct))
 		fd.XORKeyStream(pt2, ct)
-		return bytes.Compare(pt2, pt) == 0
+		return bytes.Equal(pt2, pt)
 	}
 	if err := quick.Check(f, nil); err != nil {
 		t.Error(err)

@@ -131,7 +131,6 @@ func blockXor(dst, a, b *[BlockSize]byte) {
 	for i := 0; i < BlockSize; i++ {
 		dst[i] = a[i] ^ b[i]
 	}
-	return
 }
 
 func (h *Hash) step(hin, m [BlockSize]byte) [BlockSize]byte {

@@ -33,7 +33,7 @@ func TestCBCCrypter(t *testing.T) {
 		e.CryptBlocks(ct, pt)
 		d := cipher.NewCBCDecrypter(c, iv[:])
 		d.CryptBlocks(ct, ct)
-		return bytes.Compare(pt, ct) == 0
+		return bytes.Equal(pt, ct)
 	}
 	if err := quick.Check(f, nil); err != nil {
 		t.Error(err)

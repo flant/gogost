@@ -37,11 +37,11 @@ func TestVector(t *testing.T) {
 	c := NewCipher(key)
 	dst := make([]byte, BlockSize)
 	c.Encrypt(dst, pt[:])
-	if bytes.Compare(dst, ct[:]) != 0 {
+	if !bytes.Equal(dst, ct[:]) {
 		t.FailNow()
 	}
 	c.Decrypt(dst, dst)
-	if bytes.Compare(dst, pt[:]) != 0 {
+	if !bytes.Equal(dst, pt[:]) {
 		t.FailNow()
 	}
 }

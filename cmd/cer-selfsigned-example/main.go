@@ -216,6 +216,9 @@ func main() {
 		&cerTmpl, caCer, pub,
 		&gost3410.PrivateKeyReverseDigest{Prv: caPrv.(*gost3410.PrivateKey)},
 	)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	data = pem.EncodeToMemory(&pem.Block{Type: PEMCer, Bytes: data})
 	if *outCer == "" {
 		_, err = os.Stdout.Write(data)

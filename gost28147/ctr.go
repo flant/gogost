@@ -53,5 +53,4 @@ MainLoop:
 		}
 		i++
 	}
-	return
 }

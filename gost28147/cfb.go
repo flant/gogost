@@ -44,7 +44,6 @@ MainLoop:
 		}
 		i++
 	}
-	return
 }
 
 type CFBDecrypter struct {
@@ -76,5 +75,4 @@ MainLoop:
 		}
 		i++
 	}
-	return
 }

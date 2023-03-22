@@ -67,10 +67,10 @@ func TestRFCVectors(t *testing.T) {
 	if err != nil {
 		t.FailNow()
 	}
-	if bytes.Compare(pub.Raw()[:32], pubX) != 0 {
+	if !bytes.Equal(pub.Raw()[:32], pubX) {
 		t.FailNow()
 	}
-	if bytes.Compare(pub.Raw()[32:], pubY) != 0 {
+	if !bytes.Equal(pub.Raw()[32:], pubY) {
 		t.FailNow()
 	}
 	ourSign, err := prv.SignDigest(digest, rand.Reader)
