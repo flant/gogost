@@ -17,6 +17,7 @@ package gost3410
 
 import (
 	"errors"
+	"fmt"
 	"math/big"
 
 	"go.cypherpunks.ru/gogost/v5/gost28147"
@@ -31,11 +32,11 @@ func (prv *PrivateKey) KEK2001(pub *PublicKey, ukm *big.Int) ([]byte, error) {
 	}
 	key, err := prv.KEK(pub, ukm)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2001: %w", err)
 	}
 	h := gost341194.New(&gost28147.SboxIdGostR341194CryptoProParamSet)
 	if _, err = h.Write(key); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2001: %w", err)
 	}
 	return h.Sum(key[:0]), nil
 }

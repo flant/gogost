@@ -31,7 +31,7 @@ type PrivateKey struct {
 func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
 	pointSize := c.PointSize()
 	if len(raw) != pointSize {
-		return nil, fmt.Errorf("gogost/gost3410: len(key) != %d", pointSize)
+		return nil, fmt.Errorf("gogost/gost3410: len(key)=%d != %d", len(raw), pointSize)
 	}
 	key := make([]byte, pointSize)
 	for i := 0; i < len(key); i++ {
@@ -47,7 +47,7 @@ func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
 func GenPrivateKey(c *Curve, rand io.Reader) (*PrivateKey, error) {
 	raw := make([]byte, c.PointSize())
 	if _, err := io.ReadFull(rand, raw); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.GenPrivateKey: %w", err)
 	}
 	return NewPrivateKey(c, raw)
 }
@@ -61,7 +61,7 @@ func (prv *PrivateKey) Raw() []byte {
 func (prv *PrivateKey) PublicKey() (*PublicKey, error) {
 	x, y, err := prv.C.Exp(prv.Key, prv.C.X, prv.C.Y)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.PublicKey: %w", err)
 	}
 	return &PublicKey{prv.C, x, y}, nil
 }
@@ -80,7 +80,7 @@ func (prv *PrivateKey) SignDigest(digest []byte, rand io.Reader) ([]byte, error)
 	s := big.NewInt(0)
 Retry:
 	if _, err = io.ReadFull(rand, kRaw); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.SignDigest: %w", err)
 	}
 	k = bytes2big(kRaw)
 	k.Mod(k, prv.C.Q)
@@ -89,7 +89,7 @@ Retry:
 	}
 	r, _, err = prv.C.Exp(k, prv.C.X, prv.C.Y)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.SignDigest: %w", err)
 	}
 	r.Mod(r, prv.C.Q)
 	if r.Cmp(zero) == 0 {

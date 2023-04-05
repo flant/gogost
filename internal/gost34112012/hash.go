@@ -452,7 +452,7 @@ func (h *Hash) MarshalBinary() (data []byte, err error) {
 func (h *Hash) UnmarshalBinary(data []byte) error {
 	expectedLen := len(MarshaledName) + 1 + 8 + 2*BlockSize
 	if len(data) < expectedLen {
-		return fmt.Errorf("gogost/internal/gost34112012: len(data) != %d", expectedLen)
+		return fmt.Errorf("gogost/internal/gost34112012: len(data)=%d != %d", len(data), expectedLen)
 	}
 	if !bytes.HasPrefix(data, []byte(MarshaledName)) {
 		return errors.New("gogost/internal/gost34112012: no hash name prefix")

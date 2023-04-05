@@ -21,6 +21,7 @@ import (
 	"crypto/hmac"
 	"encoding/binary"
 	"errors"
+	"fmt"
 )
 
 var InvalidTag = errors.New("gogost/mgm: invalid authentication tag")
@@ -45,10 +46,10 @@ type MGM struct {
 func NewMGM(cipher cipher.Block, tagSize int) (cipher.AEAD, error) {
 	blockSize := cipher.BlockSize()
 	if !(blockSize == 8 || blockSize == 16) {
-		return nil, errors.New("gogost/mgm: only 64/128 blocksizes allowed")
+		return nil, errors.New("gogost/mgm: only {64|128} blocksizes allowed")
 	}
 	if tagSize < 4 || tagSize > blockSize {
-		return nil, errors.New("gogost/mgm: invalid tag size")
+		return nil, fmt.Errorf("gogost/mgm: invalid tag size (4<=%d<=%d)", tagSize, blockSize)
 	}
 	mgm := MGM{
 		MaxSize:   uint64(1<<uint(blockSize*8/2) - 1),
@@ -215,7 +216,7 @@ func (mgm *MGM) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, err
 	mgm.validateNonce(nonce)
 	mgm.validateSizes(ciphertext, additionalData)
 	if len(ciphertext) < mgm.TagSize {
-		return nil, errors.New("ciphertext is too short")
+		return nil, fmt.Errorf("ciphertext is too short (%d<%d)", len(ciphertext), mgm.TagSize)
 	}
 	if uint64(len(ciphertext)-mgm.TagSize) > mgm.MaxSize {
 		panic("ciphertext is too big")

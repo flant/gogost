@@ -16,7 +16,7 @@
 package gost28147
 
 import (
-	"errors"
+	"fmt"
 )
 
 var (
@@ -42,10 +42,10 @@ type MAC struct {
 // following ones are fed to Write function.
 func (c *Cipher) NewMAC(size int, iv []byte) (*MAC, error) {
 	if size == 0 || size > 8 {
-		return nil, errors.New("gogost/gost28147: invalid tag size")
+		return nil, fmt.Errorf("gogost/gost28147: invalid tag size (0<%d<=8)", size)
 	}
 	if len(iv) != BlockSize {
-		return nil, errors.New("gogost/gost28147: len(iv) != 8")
+		return nil, fmt.Errorf("gogost/gost28147: len(iv)=%d != %d", len(iv), BlockSize)
 	}
 	m := MAC{c: c, size: size, iv: iv}
 	n2, n1 := block2nvs(iv)

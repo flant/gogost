@@ -16,6 +16,7 @@
 package gost3410
 
 import (
+	"fmt"
 	"math/big"
 
 	"go.cypherpunks.ru/gogost/v5/gost34112012256"
@@ -27,11 +28,11 @@ import (
 func (prv *PrivateKey) KEK2012256(pub *PublicKey, ukm *big.Int) ([]byte, error) {
 	key, err := prv.KEK(pub, ukm)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2012256: %w", err)
 	}
 	h := gost34112012256.New()
 	if _, err = h.Write(key); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2012256: %w", err)
 	}
 	return h.Sum(key[:0]), nil
 }
@@ -41,11 +42,11 @@ func (prv *PrivateKey) KEK2012256(pub *PublicKey, ukm *big.Int) ([]byte, error) 
 func (prv *PrivateKey) KEK2012512(pub *PublicKey, ukm *big.Int) ([]byte, error) {
 	key, err := prv.KEK(pub, ukm)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2012256: %w", err)
 	}
 	h := gost34112012512.New()
 	if _, err = h.Write(key); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("gogost/gost3410.PrivateKey.KEK2012256: %w", err)
 	}
 	return h.Sum(key[:0]), nil
 }

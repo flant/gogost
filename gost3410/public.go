@@ -56,7 +56,7 @@ func (pub *PublicKey) Raw() []byte {
 func (pub *PublicKey) VerifyDigest(digest, signature []byte) (bool, error) {
 	pointSize := pub.C.PointSize()
 	if len(signature) != 2*pointSize {
-		return false, fmt.Errorf("gogost/gost3410: len(signature) != %d", 2*pointSize)
+		return false, fmt.Errorf("gogost/gost3410: len(signature)=%d != %d", len(signature), 2*pointSize)
 	}
 	s := bytes2big(signature[:pointSize])
 	r := bytes2big(signature[pointSize:])
