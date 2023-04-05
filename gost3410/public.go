@@ -27,6 +27,7 @@ type PublicKey struct {
 	Y *big.Int
 }
 
+// Unmarshal LE(X)||LE(Y) public key. "raw" must be 2*c.PointSize() length.
 func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
 	pointSize := c.PointSize()
 	key := make([]byte, 2*pointSize)
@@ -43,9 +44,10 @@ func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
 	}, nil
 }
 
-func (pub *PublicKey) Raw() []byte {
+// Marshal LE(X)||LE(Y) public key. raw will be 2*pub.C.PointSize() length.
+func (pub *PublicKey) Raw() (raw []byte) {
 	pointSize := pub.C.PointSize()
-	raw := append(
+	raw = append(
 		pad(pub.Y.Bytes(), pointSize),
 		pad(pub.X.Bytes(), pointSize)...,
 	)

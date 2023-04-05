@@ -88,6 +88,8 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 	return &c, nil
 }
 
+// Get the size of the point's coordinate in bytes.
+// 32 for 256-bit curves, 64 for 512-bit ones.
 func (c *Curve) PointSize() int {
 	return pointSize(c.P)
 }

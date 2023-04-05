@@ -14,7 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // GOST R 34.11-2012 512-bit hash function.
-// RFC 6986.
+// RFC 6986. Big-endian hash output.
 package gost34112012512
 
 import (

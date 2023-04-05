@@ -28,6 +28,7 @@ type PrivateKey struct {
 	Key *big.Int
 }
 
+// Unmarshal little-endian private key. "raw" must be c.PointSize() length.
 func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
 	pointSize := c.PointSize()
 	if len(raw) != pointSize {
@@ -52,8 +53,9 @@ func GenPrivateKey(c *Curve, rand io.Reader) (*PrivateKey, error) {
 	return NewPrivateKey(c, raw)
 }
 
-func (prv *PrivateKey) Raw() []byte {
-	raw := pad(prv.Key.Bytes(), prv.C.PointSize())
+// Marshal little-endian private key. raw will be prv.C.PointSize() length.
+func (prv *PrivateKey) Raw() (raw []byte) {
+	raw = pad(prv.Key.Bytes(), prv.C.PointSize())
 	reverse(raw)
 	return raw
 }
@@ -109,6 +111,7 @@ Retry:
 	), nil
 }
 
+// Sign the digest. opts argument is unused.
 func (prv *PrivateKey) Sign(rand io.Reader, digest []byte, opts crypto.SignerOpts) ([]byte, error) {
 	return prv.SignDigest(digest, rand)
 }

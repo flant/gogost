@@ -19,6 +19,7 @@ import (
 	"math/big"
 )
 
+// Unmarshal little-endian UKM value.
 func NewUKM(raw []byte) *big.Int {
 	t := make([]byte, len(raw))
 	for i := 0; i < len(t); i++ {
