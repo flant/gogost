@@ -5,7 +5,11 @@
 
 @anchor{Release 5.10.0}
 @item 5.10.0
-@code{mgm.MGM.Open} returns @code{mgm.InvalidTag} for failed authentication.
+    @itemize
+    @item @code{mgm.MGM.Open} returns @code{mgm.InvalidTag} for failed authentication
+    @item Example @file{cmd/cer-dane-hash} and
+        @file{cmd/cer-selfsigned-example} utilities appeared
+    @end itemize
 
 @anchor{Release 5.9.1}
 @item 5.9.1
