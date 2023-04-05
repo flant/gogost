@@ -89,7 +89,7 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 }
 
 func (c *Curve) PointSize() int {
-	return PointSize(c.P)
+	return pointSize(c.P)
 }
 
 func (c *Curve) pos(v *big.Int) {
