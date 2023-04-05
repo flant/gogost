@@ -23,6 +23,8 @@ import (
 	"errors"
 )
 
+var InvalidTag = errors.New("gogost/mgm: invalid authentication tag")
+
 type Mul interface {
 	Mul(x, y []byte) []byte
 }
@@ -207,6 +209,8 @@ func (mgm *MGM) Seal(dst, nonce, plaintext, additionalData []byte) []byte {
 	return ret
 }
 
+// Open the authenticated ciphertext. If authentication tag is invalid,
+// then InvalidTag error is returned.
 func (mgm *MGM) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error) {
 	mgm.validateNonce(nonce)
 	mgm.validateSizes(ciphertext, additionalData)
@@ -221,7 +225,7 @@ func (mgm *MGM) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, err
 	copy(mgm.icn, nonce)
 	mgm.auth(mgm.sum, ct, additionalData)
 	if !hmac.Equal(mgm.sum[:mgm.TagSize], ciphertext[len(ciphertext)-mgm.TagSize:]) {
-		return nil, errors.New("gogost/mgm: invalid authentication tag")
+		return nil, InvalidTag
 	}
 	mgm.crypt(out, ct)
 	return ret, nil

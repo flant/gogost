@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.10.0}
+@item 5.10.0
+@code{mgm.MGM.Open} returns @code{mgm.InvalidTag} for failed authentication.
+
 @anchor{Release 5.9.1}
 @item 5.9.1
 Updated and cleaned up @file{go.sum}.
