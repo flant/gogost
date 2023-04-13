@@ -1,236 +1,149 @@
-@multitable {XXXXX} {XXXX-XX-XX} {XXXX KiB} {meta4 link sig} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}
-@headitem Version @tab Date @tab Size @tab Tarball @tab SHA256 checksum @tab Streebog-256 checksum
+@multitable {XXXXX} {XXXX-XX-XX} {XXXX KiB} {meta4 tar sig}
+@headitem Version @tab Date @tab Size @tab Tarball
 
-@item @ref{Release 5.10.0, 5.10.0} @tab 2023-04-05 @tab 70 KiB
-@tab
-    @url{gogost-5.10.0.tar.zst.meta4, meta4}
-    @url{gogost-5.10.0.tar.zst, link}
-    @url{gogost-5.10.0.tar.zst.sig, sig}
-@tab @code{A06556A4 A9FB7C89 412414B8 1213EE48 983FBD7C D2418A09 8A0CA82B 6FE78ADE}
-@tab @code{73af159cf5b016cb2fae116a2074fa1489e74cf4f4eb3328608fbc6741a4bd14}
+@item @ref{Release 5.10.0, 5.10.0} @tab 2023-04-05 @tab 70 KiB @tab
+@url{gogost-5.10.0.tar.zst.meta4, meta4}
+@url{gogost-5.10.0.tar.zst, tar}
+@url{gogost-5.10.0.tar.zst.sig, sig}
 
-@item @ref{Release 5.9.1, 5.9.1} @tab 2022-11-02 @tab 67 KiB
-@tab
-    @url{gogost-5.9.1.tar.zst.meta4, meta4}
-    @url{gogost-5.9.1.tar.zst, link}
-    @url{gogost-5.9.1.tar.zst.sig, sig}
-@tab @code{6962A342 27142524 532651E8 8AE0F06B 70B55FE4 07B53CB2 773171CD 68D2C2CF}
-@tab @code{a4960b5db0d2f0ef7c918d8bac86064d4a1e5a6b2153c86a6f5dfe6428e627f1}
+@item @ref{Release 5.9.1, 5.9.1} @tab 2022-11-02 @tab 67 KiB @tab
+@url{gogost-5.9.1.tar.zst.meta4, meta4}
+@url{gogost-5.9.1.tar.zst, tar}
+@url{gogost-5.9.1.tar.zst.sig, sig}
 
-@item @ref{Release 5.9.0, 5.9.0} @tab 2021-11-16 @tab 67 KiB
-@tab
-    @url{gogost-5.9.0.tar.zst.meta4, meta4}
-    @url{gogost-5.9.0.tar.zst, link}
-    @url{gogost-5.9.0.tar.zst.sig, sig}
-@tab @code{39E7A29D 6958EFA5 16ECC4D0 0837B175 41EFC83F EA7E0E56 85A35933 EFE250FE}
-@tab @code{fce84cfd5c5f275641a8c98b20639b16c9463dad134bc61d154d73da42b755d4}
+@item @ref{Release 5.9.0, 5.9.0} @tab 2021-11-16 @tab 67 KiB @tab
+@url{gogost-5.9.0.tar.zst.meta4, meta4}
+@url{gogost-5.9.0.tar.zst, tar}
+@url{gogost-5.9.0.tar.zst.sig, sig}
 
-@item @ref{Release 5.8.0, 5.8.0} @tab 2021-10-08 @tab 67 KiB
-@tab
-    @url{gogost-5.8.0.tar.zst.meta4, meta4}
-    @url{gogost-5.8.0.tar.zst, link}
-    @url{gogost-5.8.0.tar.zst.sig, sig}
-@tab @code{C82AAA5D 7470FF7B DCF31292 DD978986 0EAF753B E4144D4E 8661917B 072A57B2}
-@tab @code{0d00a3b4ea2a289524448ddd710dbb97464990a56731e4758c52c9cabf8e8d78}
+@item @ref{Release 5.8.0, 5.8.0} @tab 2021-10-08 @tab 67 KiB @tab
+@url{gogost-5.8.0.tar.zst.meta4, meta4}
+@url{gogost-5.8.0.tar.zst, tar}
+@url{gogost-5.8.0.tar.zst.sig, sig}
 
-@item 5.7.1 @tab 2021-10-04 @tab 66 KiB
-@tab
-    @url{gogost-5.7.1.tar.zst.meta4, meta4}
-    @url{gogost-5.7.1.tar.zst, link}
-    @url{gogost-5.7.1.tar.zst.sig, sig}
-@tab @code{E410A468 B1AC2167 4A6F69CA 14AAAC92 6A3F56EE 100D1C46 9A220E7B B0B77E0E}
-@tab @code{83a03c974505ba00efeb4f89912800253ee858ec83a3d8e3e41d48e76647eacb}
+@item 5.7.1 @tab 2021-10-04 @tab 66 KiB @tab
+@url{gogost-5.7.1.tar.zst.meta4, meta4}
+@url{gogost-5.7.1.tar.zst, tar}
+@url{gogost-5.7.1.tar.zst.sig, sig}
 
-@item @ref{Release 5.7.0, 5.7.0} @tab 2021-08-17 @tab 61 KiB
-@tab
-    @url{gogost-5.7.0.tar.xz.meta4, meta4}
-    @url{gogost-5.7.0.tar.xz, link}
-    @url{gogost-5.7.0.tar.xz.sig, sig}
-@tab @code{76F3ABF7 88ABFDC8 706F511D B2B4A313 336AEC2D BC73C288 C5675B4A EB59746B}
-@tab @code{0601177fd63f35afd546440b2dd799008eaed447504982572010c1c8bfca98c2}
+@item @ref{Release 5.7.0, 5.7.0} @tab 2021-08-17 @tab 61 KiB @tab
+@url{gogost-5.7.0.tar.xz.meta4, meta4}
+@url{gogost-5.7.0.tar.xz, tar}
+@url{gogost-5.7.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.6.0, 5.6.0} @tab 2021-04-02 @tab 61 KiB
-@tab
-    @url{gogost-5.6.0.tar.xz.meta4, meta4}
-    @url{gogost-5.6.0.tar.xz, link}
-    @url{gogost-5.6.0.tar.xz.sig, sig}
-@tab @code{7F224CA2 34DF2076 D6EE7687 B362D370 719DA29F C25CCC10 7AAC712E BB11751E}
-@tab @code{139fc22dba80dc75f8860c7b3e87240d42bcf7b3cf5e4ded8e5de360535ae78f}
+@item @ref{Release 5.6.0, 5.6.0} @tab 2021-04-02 @tab 61 KiB @tab
+@url{gogost-5.6.0.tar.xz.meta4, meta4}
+@url{gogost-5.6.0.tar.xz, tar}
+@url{gogost-5.6.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.5.0, 5.5.0} @tab 2021-01-25 @tab 61 KiB
-@tab
-    @url{gogost-5.5.0.tar.xz.meta4, meta4}
-    @url{gogost-5.5.0.tar.xz, link}
-    @url{gogost-5.5.0.tar.xz.sig, sig}
-@tab @code{F92084FB 2D4A7BA2 624C468E A2149C49 96C2006C 05AFE093 23C75283 EBCCD8E4}
-@tab @code{1b26b19a697a427257dd86f3688197921fb9028e44384192f6046c503b24ef87}
+@item @ref{Release 5.5.0, 5.5.0} @tab 2021-01-25 @tab 61 KiB @tab
+@url{gogost-5.5.0.tar.xz.meta4, meta4}
+@url{gogost-5.5.0.tar.xz, tar}
+@url{gogost-5.5.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.4.0, 5.4.0} @tab 2021-01-24 @tab 60 KiB
-@tab
-    @url{gogost-5.4.0.tar.xz.meta4, meta4}
-    @url{gogost-5.4.0.tar.xz, link}
-    @url{gogost-5.4.0.tar.xz.sig, sig}
-@tab @code{33EA1FEF AAD81831 27ACF816 F1621DF0 AE9F34B0 EBD3324E BDDABDE1 C3F07EA0}
-@tab @code{adc275ae7db766a862ffca1680c31fcb18f5906b24164de9810d8b7a85f26d53}
+@item @ref{Release 5.4.0, 5.4.0} @tab 2021-01-24 @tab 60 KiB @tab
+@url{gogost-5.4.0.tar.xz.meta4, meta4}
+@url{gogost-5.4.0.tar.xz, tar}
+@url{gogost-5.4.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.3.0, 5.3.0} @tab 2021-01-21 @tab 61 KiB
-@tab
-    @url{gogost-5.3.0.tar.xz.meta4, meta4}
-    @url{gogost-5.3.0.tar.xz, link}
-    @url{gogost-5.3.0.tar.xz.sig, sig}
-@tab @code{EB8F537F 04854C3D E162D38A 84DA7887 C2B5B387 DBED8D3A 55E27F59 8CD72AA1}
-@tab @code{b60f03d693b7dcb82d9fb6a5936f0b34b90546a108d50e401b0c1ffef62c8f1e}
+@item @ref{Release 5.3.0, 5.3.0} @tab 2021-01-21 @tab 61 KiB @tab
+@url{gogost-5.3.0.tar.xz.meta4, meta4}
+@url{gogost-5.3.0.tar.xz, tar}
+@url{gogost-5.3.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.2.0, 5.2.0} @tab 2021-01-21 @tab 60 KiB
-@tab
-    @url{gogost-5.2.0.tar.xz.meta4, meta4}
-    @url{gogost-5.2.0.tar.xz, link}
-    @url{gogost-5.2.0.tar.xz.sig, sig}
-@tab @code{B7329A8C FB0E330B AE43B074 0D59B1FD 483E1652 6E1233A4 4E3844E6 A1130D24}
-@tab @code{f3e381e29334add141484364bfcd6834308d7f5e3c74827c2617b6f70851687b}
+@item @ref{Release 5.2.0, 5.2.0} @tab 2021-01-21 @tab 60 KiB @tab
+@url{gogost-5.2.0.tar.xz.meta4, meta4}
+@url{gogost-5.2.0.tar.xz, tar}
+@url{gogost-5.2.0.tar.xz.sig, sig}
 
-@item @ref{Release 5.1.1, 5.1.1} @tab 2021-01-16 @tab 60 KiB
-@tab
-    @url{gogost-5.1.1.tar.xz.meta4, meta4}
-    @url{gogost-5.1.1.tar.xz, link}
-    @url{gogost-5.1.1.tar.xz.sig, sig}
-@tab @code{F11CFDED 18327364 11BDF5EE 1236C5B6 25733220 1ECCF500 31B887A2 E9601BE6}
-@tab @code{2926f15d273f229a49e69c63a1ae9b94fed7e25046f7ee0d32afba08dc7ec970}
+@item @ref{Release 5.1.1, 5.1.1} @tab 2021-01-16 @tab 60 KiB @tab
+@url{gogost-5.1.1.tar.xz.meta4, meta4}
+@url{gogost-5.1.1.tar.xz, tar}
+@url{gogost-5.1.1.tar.xz.sig, sig}
 
-@item @ref{Release 5.1.0, 5.1.0} @tab 2020-10-07 @tab 63 KiB
-@tab
-    @url{gogost-5.1.0.tar.xz.meta4, meta4}
-    @url{gogost-5.1.0.tar.xz, link}
-    @url{gogost-5.1.0.tar.xz.sig, sig}
-@tab @code{4AC24706 DA444606 E7E77F64 D27FE0FE 645C8389 E0B92871 563809BA 2D0194E6}
-@tab @code{ee468925f1f1cf55311c62b8953150a2318c7b1d514e499eb2fa97fa93b52fb6}
+@item @ref{Release 5.1.0, 5.1.0} @tab 2020-10-07 @tab 63 KiB @tab
+@url{gogost-5.1.0.tar.xz.meta4, meta4}
+@url{gogost-5.1.0.tar.xz, tar}
+@url{gogost-5.1.0.tar.xz.sig, sig}
 
-@item 5.0.2 @tab 2020-09-05 @tab 62 KiB
-@tab
-    @url{gogost-5.0.2.tar.xz.meta4, meta4}
-    @url{gogost-5.0.2.tar.xz, link}
-    @url{gogost-5.0.2.tar.xz.sig, sig}
-@tab @code{2A62D4B8 B45CBD6D EFF8DD2A 973F16B3 463F8365 467408A0 2DD538F9 0EFD0B69}
-@tab @code{0dd8ed5b0cfae0b8ad30658dab3e12188c005a590db0a698731fb85dcec679c4}
+@item 5.0.2 @tab 2020-09-05 @tab 62 KiB @tab
+@url{gogost-5.0.2.tar.xz.meta4, meta4}
+@url{gogost-5.0.2.tar.xz, tar}
+@url{gogost-5.0.2.tar.xz.sig, sig}
 
-@item 5.0.1 @tab 2020-09-05 @tab 62 KiB
-@tab
-    @url{gogost-5.0.1.tar.xz.meta4, meta4}
-    @url{gogost-5.0.1.tar.xz, link}
-    @url{gogost-5.0.1.tar.xz.sig, sig}
-@tab @code{4DAEA73C 44527737 054C659A 9B619A21 643EA3AA 66F6E092 4AC8777A 5D897C6A}
-@tab @code{0bde87f569e0dbad29856610dcbd2ffbcaca4f4899046cb138d92b059856b4b2}
+@item 5.0.1 @tab 2020-09-05 @tab 62 KiB @tab
+@url{gogost-5.0.1.tar.xz.meta4, meta4}
+@url{gogost-5.0.1.tar.xz, tar}
+@url{gogost-5.0.1.tar.xz.sig, sig}
 
-@item @ref{Release 5.0.0, 5.0.0} @tab 2020-09-04 @tab 62 KiB
-@tab
-    @url{gogost-5.0.0.tar.xz.meta4, meta4}
-    @url{gogost-5.0.0.tar.xz, link}
-    @url{gogost-5.0.0.tar.xz.sig, sig}
-@tab @code{222CB86E 559E9CCF E80FFFB1 B3A7908B A978FE84 9E12B7F9 DA571512 6A24BCA7}
-@tab @code{2a0fc616372fe905e8677e1e82d8bd82f852e6393c03cbfb34f69f855bcbfc85}
+@item @ref{Release 5.0.0, 5.0.0} @tab 2020-09-04 @tab 62 KiB @tab
+@url{gogost-5.0.0.tar.xz.meta4, meta4}
+@url{gogost-5.0.0.tar.xz, tar}
+@url{gogost-5.0.0.tar.xz.sig, sig}
 
-@item 4.3.1 @tab 2020-09-01 @tab 63 KiB
-@tab
-    @url{gogost-4.3.1.tar.xz.meta4, meta4}
-    @url{gogost-4.3.1.tar.xz, link}
-    @url{gogost-4.3.1.tar.xz.sig, sig}
-@tab @code{FEB48FAA 49F43FB4 6FF4812C ECB9BD8B 077EA3A1 693088CA 1C2F29E8 F2AFE500}
-@tab @code{785b17e7f84f3b472d5bdcb710e124908da656bdec2df7f6bcf0a1b4042403ce}
+@item 4.3.1 @tab 2020-09-01 @tab 63 KiB @tab
+@url{gogost-4.3.1.tar.xz.meta4, meta4}
+@url{gogost-4.3.1.tar.xz, tar}
+@url{gogost-4.3.1.tar.xz.sig, sig}
 
-@item @ref{Release 4.3.0, 4.3.0} @tab 2020-08-02 @tab 58 KiB
-@tab
-    @url{gogost-4.3.0.tar.xz.meta4, meta4}
-    @url{gogost-4.3.0.tar.xz, link}
-    @url{gogost-4.3.0.tar.xz.sig, sig}
-@tab @code{B5550996 57149869 46F01316 937CA4E2 C0786F90 F0281E59 FD3E4D0B 633785EC}
-@tab @code{e5a187c1e9753b747918a13008f128efa0b9fbc8f2b26ef8af1315a53ac8b8ba}
+@item @ref{Release 4.3.0, 4.3.0} @tab 2020-08-02 @tab 58 KiB @tab
+@url{gogost-4.3.0.tar.xz.meta4, meta4}
+@url{gogost-4.3.0.tar.xz, tar}
+@url{gogost-4.3.0.tar.xz.sig, sig}
 
-@item @ref{Release 4.2.4, 4.2.4} @tab 2020-06-24 @tab 58 KiB
-@tab
-    @url{gogost-4.2.4.tar.xz.meta4, meta4}
-    @url{gogost-4.2.4.tar.xz, link}
-    @url{gogost-4.2.4.tar.xz.sig, sig}
-@tab @code{AB7716CB B1E67C5F 5F38B4F9 EEE2733E 931A0498 084AF7BC E816F961 16EB26AE}
-@tab @code{f3c198b616de3cf15626d7741bfed1dd927a7cc85a8b24d68f48f86d64417a8c}
+@item @ref{Release 4.2.4, 4.2.4} @tab 2020-06-24 @tab 58 KiB @tab
+@url{gogost-4.2.4.tar.xz.meta4, meta4}
+@url{gogost-4.2.4.tar.xz, tar}
+@url{gogost-4.2.4.tar.xz.sig, sig}
 
-@item @ref{Release 4.2.3, 4.2.3} @tab 2020-01-22 @tab 58 KiB
-@tab
-    @url{gogost-4.2.3.tar.xz.meta4, meta4}
-    @url{gogost-4.2.3.tar.xz, link}
-    @url{gogost-4.2.3.tar.xz.sig, sig}
-@tab @code{0259919D 6C5F61CC BDAD40E8 52E94EA9 29C0A2C1 7C819158 445BA28E 6BA0B105}
-@tab @code{a0272ddd522ab49795b43a9efcd6e152510e4b1c3afd4feddd45e0a122643a57}
+@item @ref{Release 4.2.3, 4.2.3} @tab 2020-01-22 @tab 58 KiB @tab
+@url{gogost-4.2.3.tar.xz.meta4, meta4}
+@url{gogost-4.2.3.tar.xz, tar}
+@url{gogost-4.2.3.tar.xz.sig, sig}
 
-@item @ref{Release 4.2.2, 4.2.2} @tab 2020-01-07 @tab 58 KiB
-@tab
-    @url{gogost-4.2.2.tar.xz.meta4, meta4}
-    @url{gogost-4.2.2.tar.xz, link}
-    @url{gogost-4.2.2.tar.xz.sig, sig}
-@tab @code{88735A72 1FC0D998 768EA056 F6AC018D BACD25F2 3C72458B 312D4B75 36CF39C5}
-@tab @code{91eea4919647876b1989313fbce6497bedebead2a4437449a16e0bea39088201}
+@item @ref{Release 4.2.2, 4.2.2} @tab 2020-01-07 @tab 58 KiB @tab
+@url{gogost-4.2.2.tar.xz.meta4, meta4}
+@url{gogost-4.2.2.tar.xz, tar}
+@url{gogost-4.2.2.tar.xz.sig, sig}
 
-@item @ref{Release 4.2.1, 4.2.1} @tab 2019-12-18 @tab 57 KiB
-@tab
-    @url{gogost-4.2.1.tar.xz.meta4, meta4}
-    @url{gogost-4.2.1.tar.xz, link}
-    @url{gogost-4.2.1.tar.xz.sig, sig}
-@tab @code{00AA93C7 EE5CE982 CABC881B CC3E4C35 5900C370 B16D3629 9F97F5E4 D3277862}
-@tab @code{0e307c6a01f15cdd3cb5071f88bbcc419e85c0b911de1381d0d5d058a509681e}
+@item @ref{Release 4.2.1, 4.2.1} @tab 2019-12-18 @tab 57 KiB @tab
+@url{gogost-4.2.1.tar.xz.meta4, meta4}
+@url{gogost-4.2.1.tar.xz, tar}
+@url{gogost-4.2.1.tar.xz.sig, sig}
 
-@item @ref{Release 4.2.0, 4.2.0} @tab 2019-10-18 @tab 57 KiB
-@tab
-    @url{gogost-4.2.0.tar.xz.meta4, meta4}
-    @url{gogost-4.2.0.tar.xz, link}
-    @url{gogost-4.2.0.tar.xz.sig, sig}
-@tab @code{07B44D64 E99924D2 612F9161 037EAFCE 191911B3 B2A9748F 6D340BB7 FBF8EF5A}
-@tab @code{6fc059688e4cf121c3af4a5b3bbb13661478c5df91de5f6f2da89f64486d5977}
+@item @ref{Release 4.2.0, 4.2.0} @tab 2019-10-18 @tab 57 KiB @tab
+@url{gogost-4.2.0.tar.xz.meta4, meta4}
+@url{gogost-4.2.0.tar.xz, tar}
+@url{gogost-4.2.0.tar.xz.sig, sig}
 
-@item @ref{Release 4.1.0, 4.1.0} @tab 2019-10-03 @tab 55 KiB
-@tab
-    @url{gogost-4.1.0.tar.xz.meta4, meta4}
-    @url{gogost-4.1.0.tar.xz, link}
-    @url{gogost-4.1.0.tar.xz.sig, sig}
-@tab @code{F2FEF2E0 ADEB5742 FA2B3338 64E8B91B 3CCAA97D 5BA62177 21E08A11 F1FA8133}
-@tab @code{72e0d52aa25158ab1bb45e5498ce703b516c616b71101b74d5ee259f516c4e91}
+@item @ref{Release 4.1.0, 4.1.0} @tab 2019-10-03 @tab 55 KiB @tab
+@url{gogost-4.1.0.tar.xz.meta4, meta4}
+@url{gogost-4.1.0.tar.xz, tar}
+@url{gogost-4.1.0.tar.xz.sig, sig}
 
-@item @ref{Release 4.0, 4.0} @tab 2019-08-12 @tab 56 KiB
-@tab
-    @url{gogost-4.0.tar.xz.meta4, meta4}
-    @url{gogost-4.0.tar.xz, link}
-    @url{gogost-4.0.tar.xz.sig, sig}
-@tab @code{4899B930 2110C9A9 592821D6 B206146F 2A66FC5A 3DEE9D6E 11F5EA51 72FEE6E6}
-@tab @code{ad8b58d42c3829e66dd1994265478eab921393cf0f7a8b520d900e38092a2cd6}
+@item @ref{Release 4.0, 4.0} @tab 2019-08-12 @tab 56 KiB @tab
+@url{gogost-4.0.tar.xz.meta4, meta4}
+@url{gogost-4.0.tar.xz, tar}
+@url{gogost-4.0.tar.xz.sig, sig}
 
-@item @ref{Release 3.0, 3.0} @tab 2019-07-19 @tab 47 KiB
-@tab
-    @url{gogost-3.0.tar.xz.meta4, meta4}
-    @url{gogost-3.0.tar.xz, link}
-    @url{gogost-3.0.tar.xz.sig, sig}
-@tab @code{0BC2F39C DDB66493 BDF02DA7 C0A04633 E2A33462 4E3C0C7C 567712A6 6078FC82}
-@tab @code{40de433a7e37fdca1ac2a9ef6093c85314937d59fa72e8e4dc91d5bf4eb064d7}
+@item @ref{Release 3.0, 3.0} @tab 2019-07-19 @tab 47 KiB @tab
+@url{gogost-3.0.tar.xz.meta4, meta4}
+@url{gogost-3.0.tar.xz, tar}
+@url{gogost-3.0.tar.xz.sig, sig}
 
-@item @ref{Release 2.0, 2.0} @tab 2016-11-26 @tab 39 KiB
-@tab
-    @url{gogost-2.0.tar.xz.meta4, meta4}
-    @url{gogost-2.0.tar.xz, link}
-    @url{gogost-2.0.tar.xz.sig, sig}
-@tab @code{28E8C15C 0EC5CC2A 47A8CCDA DF9EADB5 E46970AA FB7FAAF3 AA250FFC 79CE57F7}
-@tab @code{e2858b9c1e7834663838c44b9b9ebbd1f37e5b85ceba5698b6fb5d180e071710}
+@item @ref{Release 2.0, 2.0} @tab 2016-11-26 @tab 39 KiB @tab
+@url{gogost-2.0.tar.xz.meta4, meta4}
+@url{gogost-2.0.tar.xz, tar}
+@url{gogost-2.0.tar.xz.sig, sig}
 
-@item 1.2 @tab 2016-11-13 @tab 34 KiB
-@tab
-    @url{gogost-1.2.tar.xz.meta4, meta4}
-    @url{gogost-1.2.tar.xz, link}
-    @url{gogost-1.2.tar.xz.sig, sig}
-@tab @code{B894D0E4 923F0361 8A33A360 65AE860F FCFAF8F5 42A82D71 EA0A0BA7 7BC99093}
-@tab @code{fc6d3533e28d356398877674b6ee18954581c7f46832a5cf994ae243ab00ddf5}
+@item 1.2 @tab 2016-11-13 @tab 34 KiB @tab
+@url{gogost-1.2.tar.xz.meta4, meta4}
+@url{gogost-1.2.tar.xz, tar}
+@url{gogost-1.2.tar.xz.sig, sig}
 
-@item @ref{Release 1.1, 1.1} @tab 2016-10-04 @tab 33 KiB
-@tab
-    @url{gogost-1.1.tar.xz.meta4, meta4}
-    @url{gogost-1.1.tar.xz, link}
-    @url{gogost-1.1.tar.xz.sig, sig}
-@tab @code{26D37912 6FE220C1 C0381835 DEFFDC4B BDCDC394 15D6E9C1 F8A5A302 04F9452B}
-@tab @code{313fa58c2c030dd5acd20b524842bd2d4ec7403fcfca2a4a238ddc187c3ef0df}
+@item @ref{Release 1.1, 1.1} @tab 2016-10-04 @tab 33 KiB @tab
+@url{gogost-1.1.tar.xz.meta4, meta4}
+@url{gogost-1.1.tar.xz, tar}
+@url{gogost-1.1.tar.xz.sig, sig}
 
 @end multitable
