@@ -63,17 +63,7 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 		X:    x,
 		Y:    y,
 	}
-	r1 := big.NewInt(0)
-	r2 := big.NewInt(0)
-	r1.Mul(c.Y, c.Y)
-	r1.Mod(r1, c.P)
-	r2.Mul(c.X, c.X)
-	r2.Add(r2, c.A)
-	r2.Mul(r2, c.X)
-	r2.Add(r2, c.B)
-	r2.Mod(r2, c.P)
-	c.pos(r2)
-	if r1.Cmp(r2) != 0 {
+	if !c.Contains(c.X, c.Y) {
 		return nil, errors.New("gogost/gost3410: invalid curve parameters")
 	}
 	if e != nil && d != nil {
@@ -86,6 +76,21 @@ func NewCurve(p, q, a, b, x, y, e, d, co *big.Int) (*Curve, error) {
 		c.Co = co
 	}
 	return &c, nil
+}
+
+// Is point on curve?
+func (c *Curve) Contains(x, y *big.Int) bool {
+	r1 := big.NewInt(0)
+	r2 := big.NewInt(0)
+	r1.Mul(y, y)
+	r1.Mod(r1, c.P)
+	r2.Mul(x, x)
+	r2.Add(r2, c.A)
+	r2.Mul(r2, x)
+	r2.Add(r2, c.B)
+	r2.Mod(r2, c.P)
+	c.pos(r2)
+	return r1.Cmp(r2) == 0
 }
 
 // Get the size of the point's coordinate in bytes.
