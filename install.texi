@@ -10,16 +10,10 @@ $ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst.a
 $ gpg --verify gogost-@value{VERSION}.tar.zst.asc gogost-@value{VERSION}.tar.zst
 $ zstd --decompress --stdout gogost-@value{VERSION}.tar.zst | tar xf -
 $ cd gogost-@value{VERSION}
-$ redo all
+$ go build -mod=vendor -o streebog256 ./cmd/streebog256
 $ echo hello world | ./streebog256
 f72018189a5cfb803dbe1f2149cf554c40093d8e7f81c21e08ac5bcd09d9934d
 @end example
-
-It uses @url{http://cr.yp.to/redo.html, redo} build system for that
-examples. You can use either dozen of various implementations, or at
-least minimalistic POSIX shell @command{contrib/do} (just replace
-@command{redo} with @command{contrib/do} in the example above) included
-in tarball.
 
 @include download.texi
 

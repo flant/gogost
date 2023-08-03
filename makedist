@@ -9,10 +9,8 @@ redo-ifchange streebog256
 git clone . $tmp/gogost-$release
 cd $tmp/gogost-$release
 git checkout v$release
-redo VERSION
+./version > VERSION
 go mod vendor
-mkdir contrib
-cp ~/work/redo/apenwarr/minimal/do contrib/do
 
 cat > download.texi <<EOF
 You can obtain releases source code prepared tarballs on
@@ -55,23 +53,13 @@ mkinfo --output FAQ $texi
 
 rm -rf .git
 redo-cleanup full
-rm -f \
-    $texi \
-    *.texi \
-    .gitignore \
-    clean.do \
-    makedist.sh \
-    style.css \
-    TODO \
-    VERSION.do \
-    www.do
+rm -f $texi *.texi makedist version www.do
 
-perl -i -npe "s/build/build -mod=vendor/" default.do
-perl -i -npe "s/test/test -mod=vendor/" bench.do
+perl -i -npe "s/test/test -mod=vendor/" bench
 
 find . -type d -exec chmod 755 {} +
 find . -type f -exec chmod 644 {} +
-chmod +x contrib/do
+chmod +x bench
 
 cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"
