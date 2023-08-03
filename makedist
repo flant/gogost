@@ -77,9 +77,7 @@ cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"
 zstd -19 -v gogost-"$release".tar
 tarball=gogost-"$release".tar.zst
-gpg --detach-sign --sign --local-user 82343436696FC85A $tarball
-gpg --enarmor < "$tarball".sig |
-    sed "/^Comment:/d ; s/ARMORED FILE/SIGNATURE/" > "$tarball".asc
+gpg --armor --detach-sign --sign --local-user 82343436696FC85A $tarball
 meta4-create -fn "$tarball" -mtime "$tarball" -sig "$tarball".asc \
     http://www.gogost.cypherpunks.ru/"$tarball" \
     http://y.www.gogost.cypherpunks.ru/"$tarball" < "$tarball" > "$tarball".meta4
@@ -92,7 +90,7 @@ An entry for documentation:
 @item @ref{Release $release, $release} @tab $release_date @tab $size KiB @tab
 @url{$tarball.meta4, meta4}
 @url{$tarball, tar}
-@url{$tarball.sig, sig}
+@url{$tarball.asc, sig}
 EOF
 
 cat <<EOF
@@ -115,7 +113,7 @@ GoGOST'es home page is: http://www.gogost.cypherpunks.ru/
 Source code and its signature for that version can be found here:
 
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.asc
 
 GPG key: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
          GoGOST releases <gogost at cypherpunks dot ru>
@@ -145,7 +143,7 @@ GoGOST это свободное программное обеспечение �
 Исходный код и его подпись для этой версии могут быть найдены здесь:
 
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
-    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.sig
+    http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.asc
 
 GPG ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
           GoGOST releases <gogost at cypherpunks dot ru>
@@ -155,5 +153,5 @@ GPG ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
 http://lists.cypherpunks.ru/gost.html
 EOF
 
-mv $tmp/$tarball $tmp/"$tarball".sig $tmp/"$tarball".meta4 $cur/gogost.html/
+mv $tmp/$tarball $tmp/"$tarball".asc $tmp/"$tarball".meta4 $cur/gogost.html/
 rm -fr $tmp
