@@ -3,6 +3,10 @@
 
 @table @strong
 
+@anchor{Release 5.12.0}
+@item 5.12.0
+Updated dependencies.
+
 @anchor{Release 5.11.0}
 @item 5.11.0
 You can check if public key is on curve with

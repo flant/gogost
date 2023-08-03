@@ -1,11 +1,12 @@
 #!/bin/sh -ex
 
+PATH=$HOME/work/meta4ra/contrib:$PATH
 cur=$(pwd)
 tmp=$(mktemp -d)
 release=$1
 [ -n "$release" ]
 
-redo-ifchange streebog256
+[ -x streebog256 ] || go build -o streebog256 ./cmd/streebog256
 git clone . $tmp/gogost-$release
 cd $tmp/gogost-$release
 git checkout v$release

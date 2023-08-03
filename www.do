@@ -2,7 +2,7 @@ redo-ifchange *.texi
 html=gogost.html
 rm -f $html/*.html
 ${MAKEINFO:-makeinfo} --html \
-    -D "VERSION `./VERSION`" \
+    -D "VERSION `./version`" \
     --set-customization-variable NO_CSS=1 \
     --set-customization-variable SECTION_NAME_IN_TITLE=1 \
     --set-customization-variable TREE_TRANSFORMATIONS=complete_tree_nodes_menus \
