@@ -1,6 +1,11 @@
 @multitable {XXXXX} {XXXX-XX-XX} {XXXX KiB} {meta4 tar sig}
 @headitem Version @tab Date @tab Size @tab Tarball
 
+@item @ref{Release 5.13.0, 5.13.0} @tab 2023-08-07 @tab 65 KiB @tab
+@url{gogost-5.13.0.tar.zst.meta4, meta4}
+@url{gogost-5.13.0.tar.zst, tar}
+@url{gogost-5.13.0.tar.zst.asc, sig}
+
 @item @ref{Release 5.12.0, 5.12.0} @tab 2023-08-03 @tab 65 KiB @tab
 @url{gogost-5.12.0.tar.zst.meta4, meta4}
 @url{gogost-5.12.0.tar.zst, tar}
