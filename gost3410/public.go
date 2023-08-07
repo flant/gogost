@@ -22,7 +22,7 @@ import (
 )
 
 type PublicKey struct {
-	C *Curve
+	C    *Curve
 	X, Y *big.Int
 }
 
@@ -148,4 +148,44 @@ func (our *PublicKey) Equal(theirKey crypto.PublicKey) bool {
 		return false
 	}
 	return our.X.Cmp(their.X) == 0 && our.Y.Cmp(their.Y) == 0 && our.C.Equal(their.C)
+}
+
+type PublicKeyReverseDigest struct {
+	Pub *PublicKey
+}
+
+func (pub PublicKeyReverseDigest) VerifyDigest(
+	digest, signature []byte,
+) (bool, error) {
+	dgst := make([]byte, len(digest))
+	for i := 0; i < len(digest); i++ {
+		dgst[i] = digest[len(digest)-i-1]
+	}
+	return pub.Pub.VerifyDigest(dgst, signature)
+}
+
+func (pub PublicKeyReverseDigest) Equal(theirKey crypto.PublicKey) bool {
+	return pub.Pub.Equal(theirKey)
+}
+
+type PublicKeyReverseDigestAndSignature struct {
+	Pub *PublicKey
+}
+
+func (pub PublicKeyReverseDigestAndSignature) VerifyDigest(
+	digest, signature []byte,
+) (bool, error) {
+	dgst := make([]byte, len(digest))
+	for i := 0; i < len(digest); i++ {
+		dgst[i] = digest[len(digest)-i-1]
+	}
+	sign := make([]byte, len(signature))
+	for i := 0; i < len(signature); i++ {
+		sign[i] = signature[len(signature)-i-1]
+	}
+	return pub.Pub.VerifyDigest(dgst, sign)
+}
+
+func (pub PublicKeyReverseDigestAndSignature) Equal(theirKey crypto.PublicKey) bool {
+	return pub.Pub.Equal(theirKey)
 }

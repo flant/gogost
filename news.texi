@@ -13,6 +13,9 @@
         @code{gost3410.NewPrivateKeyBE}, @code{gost3410.PrivateKey.RawBE},
         functions appeared, to simplify dealing with different endianness
         keys serialisation
+    @item
+        @code{gost3410.PublicKeyReverseDigest} and
+        @code{gost3410.PublicKeyReverseDigestAndSignature} wrappers appeared
     @end itemize
 
 @anchor{Release 5.12.0}
