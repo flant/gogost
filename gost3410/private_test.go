@@ -26,7 +26,7 @@ func TestSignerInterface(t *testing.T) {
 	rand.Read(prvRaw)
 	prv, err := NewPrivateKey(CurveIdGostR34102001TestParamSet(), prvRaw)
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	var _ crypto.Signer = prv
 }

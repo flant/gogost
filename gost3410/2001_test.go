@@ -61,11 +61,11 @@ func TestRFCVectors(t *testing.T) {
 	c := CurveIdGostR34102001TestParamSet()
 	prv, err := NewPrivateKey(c, priv)
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	pub, err := prv.PublicKey()
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	if !bytes.Equal(pub.Raw()[:32], pubX) {
 		t.FailNow()
@@ -75,7 +75,7 @@ func TestRFCVectors(t *testing.T) {
 	}
 	ourSign, err := prv.SignDigest(digest, rand.Reader)
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	valid, err := pub.VerifyDigest(digest, ourSign)
 	if err != nil || !valid {
@@ -122,7 +122,7 @@ func BenchmarkSign2001(b *testing.B) {
 	c := CurveIdGostR34102001TestParamSet()
 	prv, err := GenPrivateKey(c, rand.Reader)
 	if err != nil {
-		b.FailNow()
+		b.Fatal(err)
 	}
 	digest := make([]byte, 32)
 	rand.Read(digest)
@@ -136,17 +136,17 @@ func BenchmarkVerify2001(b *testing.B) {
 	c := CurveIdGostR34102001TestParamSet()
 	prv, err := GenPrivateKey(c, rand.Reader)
 	if err != nil {
-		b.FailNow()
+		b.Fatal(err)
 	}
 	digest := make([]byte, 32)
 	rand.Read(digest)
 	sign, err := prv.SignDigest(digest, rand.Reader)
 	if err != nil {
-		b.FailNow()
+		b.Fatal(err)
 	}
 	pub, err := prv.PublicKey()
 	if err != nil {
-		b.FailNow()
+		b.Fatal(err)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -160,11 +160,11 @@ func TestPrvEqualsTo1(t *testing.T) {
 	prvRaw[len(prvRaw)-1] = 1
 	prv, err := NewPrivateKey(c, prvRaw)
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	pub, err := prv.PublicKey()
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	digest := []byte{
 		0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
@@ -174,7 +174,7 @@ func TestPrvEqualsTo1(t *testing.T) {
 	}
 	sign, err := prv.SignDigest(digest, rand.Reader)
 	if err != nil {
-		t.FailNow()
+		t.Fatal(err)
 	}
 	valid, err := pub.VerifyDigest(digest, sign)
 	if err != nil || !valid {
