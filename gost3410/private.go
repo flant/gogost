@@ -29,7 +29,7 @@ type PrivateKey struct {
 }
 
 // Unmarshal little-endian private key. "raw" must be c.PointSize() length.
-func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
+func NewPrivateKeyLE(c *Curve, raw []byte) (*PrivateKey, error) {
 	pointSize := c.PointSize()
 	if len(raw) != pointSize {
 		return nil, fmt.Errorf("gogost/gost3410: len(key)=%d != %d", len(raw), pointSize)
@@ -45,6 +45,24 @@ func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
 	return &PrivateKey{c, k.Mod(k, c.Q)}, nil
 }
 
+// Unmarshal big-endian private key. "raw" must be c.PointSize() length.
+func NewPrivateKeyBE(c *Curve, raw []byte) (*PrivateKey, error) {
+	pointSize := c.PointSize()
+	if len(raw) != pointSize {
+		return nil, fmt.Errorf("gogost/gost3410: len(key)=%d != %d", len(raw), pointSize)
+	}
+	k := bytes2big(raw)
+	if k.Cmp(zero) == 0 {
+		return nil, errors.New("gogost/gost3410: zero private key")
+	}
+	return &PrivateKey{c, k.Mod(k, c.Q)}, nil
+}
+
+// This is an alias for NewPrivateKeyLE().
+func NewPrivateKey(c *Curve, raw []byte) (*PrivateKey, error) {
+	return NewPrivateKeyLE(c, raw)
+}
+
 func GenPrivateKey(c *Curve, rand io.Reader) (*PrivateKey, error) {
 	raw := make([]byte, c.PointSize())
 	if _, err := io.ReadFull(rand, raw); err != nil {
@@ -54,10 +72,20 @@ func GenPrivateKey(c *Curve, rand io.Reader) (*PrivateKey, error) {
 }
 
 // Marshal little-endian private key. raw will be prv.C.PointSize() length.
-func (prv *PrivateKey) Raw() (raw []byte) {
+func (prv *PrivateKey) RawLE() (raw []byte) {
 	raw = pad(prv.Key.Bytes(), prv.C.PointSize())
 	reverse(raw)
 	return raw
+}
+
+// Marshal big-endian private key. raw will be prv.C.PointSize() length.
+func (prv *PrivateKey) RawBE() (raw []byte) {
+	return pad(prv.Key.Bytes(), prv.C.PointSize())
+}
+
+// This is an alias for RawLE().
+func (prv *PrivateKey) Raw() []byte {
+	return prv.RawLE()
 }
 
 func (prv *PrivateKey) PublicKey() (*PublicKey, error) {

@@ -23,12 +23,11 @@ import (
 
 type PublicKey struct {
 	C *Curve
-	X *big.Int
-	Y *big.Int
+	X, Y *big.Int
 }
 
 // Unmarshal LE(X)||LE(Y) public key. "raw" must be 2*c.PointSize() length.
-func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
+func NewPublicKeyLE(c *Curve, raw []byte) (*PublicKey, error) {
 	pointSize := c.PointSize()
 	key := make([]byte, 2*pointSize)
 	if len(raw) != len(key) {
@@ -44,15 +43,47 @@ func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
 	}, nil
 }
 
+// Unmarshal BE(X)||BE(Y) public key. "raw" must be 2*c.PointSize() length.
+func NewPublicKeyBE(c *Curve, raw []byte) (*PublicKey, error) {
+	pointSize := c.PointSize()
+	if len(raw) != 2*pointSize {
+		return nil, fmt.Errorf("gogost/gost3410: len(key) != %d", 2*pointSize)
+	}
+	return &PublicKey{
+		c,
+		bytes2big(raw[:pointSize]),
+		bytes2big(raw[pointSize:]),
+	}, nil
+}
+
+// This is an alias for NewPublicKeyLE().
+func NewPublicKey(c *Curve, raw []byte) (*PublicKey, error) {
+	return NewPublicKeyLE(c, raw)
+}
+
 // Marshal LE(X)||LE(Y) public key. raw will be 2*pub.C.PointSize() length.
-func (pub *PublicKey) Raw() (raw []byte) {
+func (pub *PublicKey) RawLE() []byte {
 	pointSize := pub.C.PointSize()
-	raw = append(
+	raw := append(
 		pad(pub.Y.Bytes(), pointSize),
 		pad(pub.X.Bytes(), pointSize)...,
 	)
 	reverse(raw)
 	return raw
+}
+
+// Marshal BE(X)||BE(Y) public key. raw will be 2*pub.C.PointSize() length.
+func (pub *PublicKey) RawBE() []byte {
+	pointSize := pub.C.PointSize()
+	return append(
+		pad(pub.X.Bytes(), pointSize),
+		pad(pub.Y.Bytes(), pointSize)...,
+	)
+}
+
+// This is an alias for RawLE().
+func (pub *PublicKey) Raw() []byte {
+	return pub.RawLE()
 }
 
 func (pub *PublicKey) VerifyDigest(digest, signature []byte) (bool, error) {

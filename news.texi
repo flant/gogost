@@ -3,6 +3,18 @@
 
 @table @strong
 
+@anchor{Release 5.13.0}
+@item 5.13.0
+    @itemize
+    @item
+        @code{gost3410.NewPublicKeyLE}, @code{gost3410.PublicKey.RawLE},
+        @code{gost3410.NewPublicKeyBE}, @code{gost3410.PublicKey.RawBE},
+        @code{gost3410.NewPrivateKeyLE}, @code{gost3410.PrivateKey.RawLE},
+        @code{gost3410.NewPrivateKeyBE}, @code{gost3410.PrivateKey.RawBE},
+        functions appeared, to simplify dealing with different endianness
+        keys serialisation
+    @end itemize
+
 @anchor{Release 5.12.0}
 @item 5.12.0
 Updated dependencies.
