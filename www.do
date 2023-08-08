@@ -11,6 +11,7 @@ ${MAKEINFO:-makeinfo} --html \
     --set-customization-variable DATE_IN_HEADER=1 \
     --set-customization-variable ASCII_PUNCTUATION=1 \
     --output $html www.texi
+cp PUBKEY-* $html/
 (
     cd $html
     export ATOM_ID="34c4c603-9fa7-4441-a089-881d216d8638"

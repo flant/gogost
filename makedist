@@ -6,7 +6,6 @@ tmp=$(mktemp -d)
 release=$1
 [ -n "$release" ]
 
-[ -x streebog256 ] || go build -o streebog256 ./cmd/streebog256
 git clone . $tmp/gogost-$release
 cd $tmp/gogost-$release
 git checkout v$release
@@ -66,8 +65,10 @@ cd ..
 tar cvf gogost-"$release".tar --uid=0 --gid=0 --numeric-owner gogost-"$release"
 zstd -19 -v gogost-"$release".tar
 tarball=gogost-"$release".tar.zst
+ssh-keygen -Y sign -f ~/.ssh/sign/gogost@cypherpunks.ru -n file $tarball
 gpg --armor --detach-sign --sign --local-user 82343436696FC85A $tarball
-meta4-create -fn "$tarball" -mtime "$tarball" -sig "$tarball".asc \
+meta4-create -fn "$tarball" -mtime "$tarball" \
+    -sig-pgp "$tarball".asc -sig-ssh "$tarball".sig \
     http://www.gogost.cypherpunks.ru/"$tarball" \
     http://y.www.gogost.cypherpunks.ru/"$tarball" < "$tarball" > "$tarball".meta4
 
@@ -79,7 +80,8 @@ An entry for documentation:
 @item @ref{Release $release, $release} @tab $release_date @tab $size KiB @tab
 @url{$tarball.meta4, meta4}
 @url{$tarball, tar}
-@url{$tarball.asc, sig}
+@url{$tarball.asc, pgp}
+@url{$tarball.sig, ssh}
 EOF
 
 cat <<EOF
@@ -104,8 +106,9 @@ Source code and its signature for that version can be found here:
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.asc
 
-GPG key: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
-         GoGOST releases <gogost at cypherpunks dot ru>
+OpenPGP key: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
+             GoGOST releases <gogost@cypherpunks.ru>
+OpenSSH key: SHA256:u8X9rPDOhxpyzGs/IugbxXbDeOu/0AttKY+LGAvHBH0
 
 Please send questions regarding the use of GoGOST, bug reports and patches
 to mailing list: http://lists.cypherpunks.ru/gost.html
@@ -134,13 +137,14 @@ GoGOST это свободное программное обеспечение �
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst ($size KiB)
     http://www.gogost.cypherpunks.ru/gogost-${release}.tar.zst.asc
 
-GPG ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
-          GoGOST releases <gogost at cypherpunks dot ru>
+OpenPGP ключ: CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
+              GoGOST releases <gogost@cypherpunks.ru>
+OpenSSH ключ: SHA256:u8X9rPDOhxpyzGs/IugbxXbDeOu/0AttKY+LGAvHBH0
 
 Пожалуйста, все вопросы касающиеся использования GoGOST, отчёты об
 ошибках и патчи отправляйте в gost почтовую рассылку:
 http://lists.cypherpunks.ru/gost.html
 EOF
 
-mv $tmp/$tarball $tmp/"$tarball".asc $tmp/"$tarball".meta4 $cur/gogost.html/
+mv $tmp/$tarball $tmp/"$tarball".asc $tmp/"$tarball".sig $tmp/"$tarball".meta4 $cur/gogost.html/
 rm -fr $tmp

@@ -6,9 +6,9 @@ website and, for example, run tests with benchmarks:
 
 @example
 $ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst
-$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst.asc
-$ gpg --verify gogost-@value{VERSION}.tar.zst.asc gogost-@value{VERSION}.tar.zst
-$ zstd --decompress --stdout gogost-@value{VERSION}.tar.zst | tar xf -
+$ [fetch|wget] http://www.gogost.cypherpunks.ru/gogost-@value{VERSION}.tar.zst.@{asc,sig@}
+[verify signature]
+$ zstd -d gogost-@value{VERSION}.tar.zst | tar xf -
 $ cd gogost-@value{VERSION}
 $ go build -mod=vendor -o streebog256 ./cmd/streebog256
 $ echo hello world | ./streebog256
@@ -44,35 +44,7 @@ $ go run main.go
 f72018189a5cfb803dbe1f2149cf554c40093d8e7f81c21e08ac5bcd09d9934d
 @end example
 
-You @strong{have to} verify downloaded tarballs integrity and
-authenticity to be sure that you retrieved trusted and untampered
-software. @url{https://www.gnupg.org/, GNU Privacy Guard} is used
-for that purpose.
-
-For the very first time it is necessary to get signing public key and
-import it. It is provided below, but you should check alternative
-resources.
-
-@verbatim
-pub   rsa2048/0x82343436696FC85A 2016-09-13 [SC]
-      CEBD 1282 2C46 9C02 A81A  0467 8234 3436 696F C85A
-uid   GoGOST releases <gogost at cypherpunks dot ru>
-@end verbatim
-
-@itemize
-
-@item @url{http://lists.cypherpunks.ru/gost.html, gost} maillist
-
-@item
-@example
-$ gpg --auto-key-locate dane --locate-keys gogost at cypherpunks dot ru
-$ gpg --auto-key-locate  wkd --locate-keys gogost at cypherpunks dot ru
-@end example
-
-@item
-@verbatiminclude PUBKEY.asc
-
-@end itemize
+@include integrity.texi
 
 GoGOST is also @command{go get}-able. For example to install
 @command{streebog256} utility:
@@ -95,7 +67,7 @@ their usage by setting @env{$GOPRIVATE=go.cypherpunks.ru}.
 
 @example
 $ [fetch|wget] http://www.ca.cypherpunks.ru/cert.pem
-$ [fetch|wget] http://www.ca.cypherpunks.ru/cert.pem.asc
+$ [fetch|wget] http://www.ca.cypherpunks.ru/cert.pem.@{asc,sig,minisig@}
 $ gpg --auto-key-locate dane --locate-keys stargrave at stargrave dot org
 $ gpg --auto-key-locate  wkd --locate-keys stargrave at gnupg dot net
 $ gpg --verify cert.pem.asc
